@@ -1,0 +1,96 @@
+{
+  "name": "@flyweel/fleo",
+  "version": "0.1.0",
+  "description": "Fleo by Flyweel — Company-agnostic open-source AI SEO + AEO content engine with multi-model research, TUI setup wizard, multi-framework adapters, and universal agent handoff packets.",
+  "license": "MIT",
+  "author": "Flyweel <hello@flyweel.co> (https://www.flyweel.co)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/openairlabs/fleo-by-flyweel.git"
+  },
+  "homepage": "https://github.com/openairlabs/fleo-by-flyweel#readme",
+  "bugs": {
+    "url": "https://github.com/openairlabs/fleo-by-flyweel/issues"
+  },
+  "type": "module",
+  "bin": {
+    "fleo": "./bin/fleo.js",
+    "flyweel-fleo": "./bin/fleo.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "bin/",
+    "dist/tui/",
+    "core/*.py",
+    "core/cli/*.py",
+    "config/",
+    "prompts/",
+    "skills/",
+    "examples/",
+    "generate.py",
+    "tui_bridge.py",
+    "requirements.txt",
+    ".env.example",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "clean": "node -e \"fs.rmSync('dist',{recursive:true,force:true})\"",
+    "build": "npm run clean && tsc -p tsconfig.json",
+    "prepack": "npm run build",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "dev": "tsx tui/cli.tsx",
+    "start": "node bin/fleo.js",
+    "setup": "node bin/fleo.js setup",
+    "smoke:no-tui": "node bin/fleo.js --no-tui",
+    "smoke:setup": "node bin/fleo.js setup --no-tui"
+  },
+  "keywords": [
+    "seo",
+    "aeo",
+    "geo",
+    "ai-seo",
+    "content-engine",
+    "programmatic-seo",
+    "nextjs",
+    "astro",
+    "webflow",
+    "nuxt",
+    "sveltekit",
+    "claude-code",
+    "cursor",
+    "opencode",
+    "tui",
+    "flyweel",
+    "fleo"
+  ],
+  "dependencies": {
+    "@inkjs/ui": "^2.0.0",
+    "commander": "^14.0.2",
+    "ink": "^7.1.0",
+    "picocolors": "^1.1.1",
+    "react": "^19.2.3",
+    "string-width": "^7.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.3",
+    "@types/react": "^19.2.7",
+    "ink-testing-library": "^4.0.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.16"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "pnpm": {
+    "auditConfig": {
+      "ignoreGhsas": [
+        "GHSA-gcqx-w48m-w2h4"
+      ]
+    }
+  }
+}

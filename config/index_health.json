@@ -1,0 +1,25 @@
+{
+  "_comment": "Manual post-deploy index health observer configuration",
+  "_version": "1.0.0",
+  "google_url_inspection": {
+    "enabled": true,
+    "requires_env": [
+      "GOOGLE_SERVICE_ACCOUNT_PATH",
+      "GSC_PROPERTY_URL"
+    ],
+    "scope": "https://www.googleapis.com/auth/webmasters.readonly",
+    "note": "URL Inspection only reports the indexed version of a deployed URL. It does not request indexing."
+  },
+  "indexnow": {
+    "enabled": true,
+    "endpoint": "https://api.indexnow.org/indexnow",
+    "requires_env": [
+      "INDEXNOW_KEY"
+    ],
+    "optional_env": [
+      "INDEXNOW_ENDPOINT",
+      "INDEXNOW_KEY_LOCATION"
+    ],
+    "key_file_requirement": "Host a UTF-8 text file named <INDEXNOW_KEY>.txt containing the key at the site root, or set INDEXNOW_KEY_LOCATION."
+  }
+}

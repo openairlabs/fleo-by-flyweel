@@ -1,0 +1,72 @@
+# Environment & Secrets (NEVER COMMIT)
+.env
+.env.*
+!.env.example
+*.env
+.envrc
+credentials/
+secrets/
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+*service-account*.json
+*-credentials.json
+auth.json
+token.json
+
+# Local Fleo Workspace State & Coding Agent Configs (User-Specific)
+.fleo/
+.agents/product-marketing.md
+.claude/
+.cursor/
+.windsurf/
+.opencode/
+.mcp.json
+
+# Dependencies & Virtual Environments
+node_modules/
+venv/
+.venv/
+env/
+ENV/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+
+# Build Artifacts
+dist/
+build/
+*.tgz
+
+# Generated Content & Runtime Logs
+output/generations/*
+!output/generations/.gitkeep
+output/.keyword_ideas_history.json
+eval/reports/
+logs/
+*.log
+tmp/
+temp/
+*.tmp
+*.cache
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage/
+test-results/
+junit.xml
+
+# OS & Editor Cruft
+.DS_Store
+Thumbs.db
+*.Zone.Identifier
+.idea/
+*.swp
+*.swo

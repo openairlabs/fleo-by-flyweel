@@ -1,0 +1,72 @@
+{
+  "keyword": "",
+  "style": "Developer Tools",
+  "composite": 74,
+  "passed": true,
+  "dimensions": {
+    "structure": {
+      "score": 58,
+      "max": 100,
+      "kind": "deterministic"
+    },
+    "faq": {
+      "score": 28,
+      "max": 100,
+      "kind": "deterministic"
+    },
+    "aeo_readiness": {
+      "score": 52,
+      "max": 100,
+      "kind": "deterministic"
+    },
+    "aeo_gates": {
+      "score": 40,
+      "max": 100,
+      "kind": "deterministic"
+    },
+    "keyword_stuffing": {
+      "score": 100,
+      "max": 100,
+      "kind": "deterministic"
+    },
+    "process_structure": {
+      "score": 100,
+      "max": 100,
+      "kind": "deterministic"
+    },
+    "author_attribution": {
+      "score": 60,
+      "max": 100,
+      "kind": "deterministic"
+    },
+    "banned_words_body": {
+      "score": 100,
+      "max": 100,
+      "kind": "deterministic"
+    },
+    "heading_quality": {
+      "score": 100,
+      "max": 100,
+      "kind": "deterministic"
+    },
+    "title_quality": {
+      "score": 100,
+      "max": 100,
+      "kind": "deterministic"
+    },
+    "internal_link_quality": {
+      "score": 100,
+      "max": 100,
+      "kind": "deterministic"
+    }
+  },
+  "deterministic_overall": 76,
+  "summary": {
+    "total_checks": 31,
+    "passed_checks": 16,
+    "total_errors": 0,
+    "total_warnings": 15
+  },
+  "slug": "postgres-branching-preview-environments",
+  "captured_at": "2026-11-14T06:35:00.254384+00:00"
+}

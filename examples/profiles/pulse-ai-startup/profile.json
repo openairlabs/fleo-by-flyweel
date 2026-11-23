@@ -1,0 +1,50 @@
+{
+  "company_name": "PulseOps",
+  "site_url": "https://pulseops.io",
+  "blog_base_path": "/blog",
+  "title_suffix": " | PulseOps",
+  "one_liner": "PulseOps automates customer onboarding checklists, renewal health alerts, and QBR decks for B2B Customer Success teams.",
+  "category": "Customer Success",
+  "default_categories": ["Customer Success", "SaaS Operations"],
+  "signup_or_cta_url": "https://pulseops.io/demo",
+  "cta_label": "Book a Demo",
+  "icp_reader": "Heads of Customer Success, RevOps leads, and B2B SaaS founders managing $1M-$30M ARR renewals",
+  "icp_business_models": [
+    "B2B SaaS teams with 30-day onboarding milestones and annual contract renewals"
+  ],
+  "icp_priority_topics": [
+    "customer onboarding automation",
+    "net revenue retention",
+    "churn prediction signals",
+    "saas renewal playbooks",
+    "qbr automation"
+  ],
+  "customer_language_terms": ["NRR", "GRR", "time-to-first-value", "champion change", "health score"],
+  "tone": "warm, tactical, operator-focused, data-backed",
+  "products": [
+    {
+      "id": "pulseops-onboarding",
+      "name": "PulseOps Onboarding Hub",
+      "url": "https://pulseops.io/onboarding",
+      "category_term": "Customer Onboarding Software",
+      "description": "Shared customer onboarding workspaces synced bi-directionally with HubSpot, Salesforce, and Linear.",
+      "key_features": ["CRM bi-directional sync", "Automated Slack milestone nudges", "Live time-to-value analytics"],
+      "pricing_facts": "Starts at $199/month for up to 5 CS seats.",
+      "trigger_keywords": ["customer onboarding", "time to value", "onboarding checklist"]
+    }
+  ],
+  "direct_competitors": ["Gainsight", "Vitally", "ChurnZero", "Planhat"],
+  "listicle_strategy": "transparent-first",
+  "compliance_rules": [
+    "Never claim native SAP or Oracle ERP connectors (currently HubSpot, Salesforce, Linear, Jira, and Slack are live)."
+  ],
+  "authors": [
+    {
+      "id": "pulseops-editorial",
+      "name": "PulseOps Editorial Team",
+      "entity_type": "Organization",
+      "url": "https://pulseops.io/about"
+    }
+  ],
+  "default_author_id": "pulseops-editorial"
+}

@@ -1,0 +1,58 @@
+{
+  "company_name": "Acme Cloud",
+  "site_url": "https://acme.dev",
+  "blog_base_path": "/blog",
+  "title_suffix": " | Acme Cloud",
+  "one_liner": "Acme Cloud provides zero-config Postgres branching and instant preview environments for full-stack engineering teams.",
+  "category": "Developer Tools",
+  "default_categories": ["Developer Tools", "Database Engineering"],
+  "signup_or_cta_url": "https://acme.dev/signup",
+  "cta_label": "Start Free",
+  "icp_reader": "VPs of Engineering, Staff Engineers, and full-stack startup founders shipping weekly on Postgres",
+  "icp_business_models": [
+    "Product-led SaaS engineering teams running CI/CD preview environments per pull request",
+    "Multi-tenant B2B platforms scaling Postgres workloads without dedicated DBAs"
+  ],
+  "icp_priority_topics": [
+    "postgres branching",
+    "database preview environments",
+    "zero-downtime schema migrations",
+    "ci cd database testing",
+    "connection pooling"
+  ],
+  "icp_pain_categories": {
+    "staging_bottlenecks": "Shared staging databases breaking whenever two engineers test schema migrations at once",
+    "slow_ci": "Waiting 20+ minutes to seed anonymized snapshots in CI pipelines"
+  },
+  "customer_language_terms": ["copy-on-write branching", "ephemeral preview DB", "PgBouncer", "migration rollback", "PR environment"],
+  "tone": "technical, candid, engineer-to-engineer, zero marketing fluff",
+  "products": [
+    {
+      "id": "acme-branching",
+      "name": "Acme Postgres Branching",
+      "url": "https://acme.dev/branching",
+      "category_term": "Serverless Postgres Platform",
+      "description": "Instant copy-on-write Postgres branches created automatically for every GitHub pull request in under 1 second.",
+      "key_features": ["Sub-second copy-on-write branches", "GitHub Actions & Vercel integration", "Built-in PgBouncer pooling"],
+      "pricing_facts": "Free tier includes 10 GiB storage; Pro starts at $29/month with usage-based compute.",
+      "trigger_keywords": ["postgres branching", "preview database", "ephemeral postgres"]
+    }
+  ],
+  "direct_competitors": ["Neon", "Supabase", "PlanetScale", "Railway"],
+  "listicle_strategy": "transparent-first",
+  "compliance_rules": [
+    "Only cite public pricing ($0 Free tier, $29/mo Pro); never promise custom SLA uptime percentages outside Enterprise plans."
+  ],
+  "authors": [
+    {
+      "id": "alex-chen",
+      "name": "Alex Chen",
+      "role": "Co-Founder & CTO, Acme Cloud",
+      "entity_type": "Person",
+      "url": "https://acme.dev/about",
+      "bio": "Distributed systems engineer focused on storage engines and developer workflows.",
+      "credentials": ["PostgreSQL internals", "Cloud database architecture"]
+    }
+  ],
+  "default_author_id": "alex-chen"
+}

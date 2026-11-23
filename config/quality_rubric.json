@@ -1,0 +1,31 @@
+{
+  "_comment": "Quality scorecard rubric - blends deterministic AI-SEO dimensions with LLM-judge subjective dimensions into one 0-100 composite. Consumed by core/content_validator.py:build_scorecard and eval/run_quality_eval.py.",
+  "_version": "1.0.0",
+  "_geo_basis": "Princeton GEO (KDD 2024): cite sources +40%, statistics +37%, quotations +30%, authoritative tone +25%, clarity +20%, keyword stuffing -10%. Authority/AEO dimensions are weighted highest because that is where citations + statistics are scored.",
+  "weights": {
+    "structure": 1.0,
+    "faq": 0.5,
+    "aeo_readiness": 1.5,
+    "aeo_gates": 1.0,
+    "keyword_stuffing": 1.0,
+    "process_structure": 0.5,
+    "author_attribution": 1.0,
+    "banned_words_body": 0.5,
+    "heading_quality": 1.0,
+    "title_quality": 0.75,
+    "clarity": 1.0,
+    "fluency": 1.0,
+    "authoritative_tone": 1.0,
+    "internal_link_quality": 0.75
+  },
+  "regression_threshold": 3,
+  "_regression_threshold_note": "Composite point drop (vs committed baseline) that fails the eval harness / CI gate. A 3-point drop on a 0-100 composite flags a meaningful regression while tolerating scorer noise.",
+  "judge": {
+    "enabled_dimensions": [
+      "clarity",
+      "fluency",
+      "authoritative_tone"
+    ],
+    "_note": "Subjective GEO factors that deterministic regex cannot measure. Scored 0-100 each by core/quality_judge.py via SmartAIRouter model_precision with reasoning disabled. A dimension that fails to parse is recorded as null + error and excluded from the composite - never faked as a pass."
+  }
+}
