@@ -145,14 +145,14 @@ def _detect_framework_at_root(root: Path) -> Optional[FrameworkId]:
 
 
 def _find_owning_repo_root(start_dir: Path, max_depth: int = 6) -> Optional[Path]:
-    probe = start_dir
-    for _ in range(max_depth):
-        if _detect_framework_at_root(probe) is not None or (probe / ".git").exists():
-            return probe
-        if probe == probe.parent:
-            break
-        probe = probe.parent
-    return None
+    return next(
+        (
+            p
+            for p in (start_dir, *start_dir.parents)[:max_depth]
+            if _detect_framework_at_root(p) is not None or (p / ".git").exists()
+        ),
+        None,
+    )
 
 
 def learn_site_contract_from_repo(
@@ -205,26 +205,19 @@ def learn_site_contract_from_repo(
     ]
     resolved_content_dir: Optional[Path] = None
     post_files: List[Path] = []
-    if explicit_content_dir is not None:
-        resolved_content_dir = explicit_content_dir
-        post_files = [
-            p for p in sorted(explicit_content_dir.rglob("*"))
-            if p.suffix.lower() in {".mdx", ".md", ".svx"} and not p.name.startswith("_")
-        ]
-    else:
-        for rel in candidate_dirs:
-            cand = root / rel
-            if cand.is_dir():
-                found = [
-                    p for p in sorted(cand.rglob("*"))
-                    if p.suffix.lower() in {".mdx", ".md", ".svx"} and not p.name.startswith("_")
-                ]
-                if found:
-                    resolved_content_dir = cand
-                    post_files = found
-                    break
-                if resolved_content_dir is None:
-                    resolved_content_dir = cand
+    search_dirs = [explicit_content_dir] if explicit_content_dir is not None else [root / rel for rel in candidate_dirs]
+    for cand in search_dirs:
+        if cand.is_dir():
+            found = [
+                p for p in sorted(cand.rglob("*"))
+                if p.suffix.lower() in {".mdx", ".md", ".svx"} and not p.name.startswith("_")
+            ]
+            if found or explicit_content_dir is not None:
+                resolved_content_dir = cand
+                post_files = found
+                break
+            if resolved_content_dir is None:
+                resolved_content_dir = cand
 
     if resolved_content_dir is None:
         default_rel = {

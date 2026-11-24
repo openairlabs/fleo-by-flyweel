@@ -1246,14 +1246,11 @@ export const SetupView = ({
               items={[
                 ['Brand Profile', status?.brandConfigured ? `${status.brandName} (${status.brandSiteUrl || status.brandCategory})` : 'Educational / Unbranded Mode'],
                 ['Website Target', status?.siteTarget?.frameworkLabel ?? 'Agent Handoff (.md)'],
-                ...((() => {
-                  const envDir = process.env.FLEO_BLOG_CONTENT_PATH || process.env.ASTRO_BLOG_PATH;
-                  if (envDir) return [['Publish Folder', `${envDir} (env override)`] as [string, string]];
-                  if (status?.siteTarget?.mode === 'repo' && status?.siteTarget?.contentDir) {
-                    return [['Publish Folder', status.siteTarget.contentDir] as [string, string]];
-                  }
-                  return [];
-                })()),
+                ...(process.env.FLEO_BLOG_CONTENT_PATH || process.env.ASTRO_BLOG_PATH
+                  ? [['Publish Folder', `${process.env.FLEO_BLOG_CONTENT_PATH || process.env.ASTRO_BLOG_PATH} (env override)`] as [string, string]]
+                  : status?.siteTarget?.mode === 'repo' && status?.siteTarget?.contentDir
+                    ? [['Publish Folder', status.siteTarget.contentDir] as [string, string]]
+                    : []),
                 [
                   'Pipeline Models',
                   customStepCount > 0 ? `${customStepCount} custom step(s) (${displayedTier})` : `Recommended Defaults (${displayedTier})`,
