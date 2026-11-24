@@ -1,13 +1,21 @@
-# Fleo by Flyweel (`@flyweel-labs/fleo`)
+<div align="center">
 
-[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-10b981.svg)](./LICENSE)
-[![Node.js >= 22](https://img.shields.io/badge/Node.js-%3E%3D22-339933.svg)](https://nodejs.org)
-[![Python >= 3.10](https://img.shields.io/badge/Python-Auto--Managed%20(%3E%3D3.10)-3776ab.svg)](./tui/lib/pythonBootstrap.ts)
-[![Stacks](https://img.shields.io/badge/Works%20With-Next.js%20%7C%20Astro%20%7C%20Webflow%20%7C%20Framer%20%7C%20Nuxt%20%7C%20SvelteKit%20%7C%20Remix-6366f1.svg)](#multi-framework-site-learner--output-adapters)
+# Fleo by Flyweel (`@flyweel-labs/fleo`)
 
 **The open-source AI SEO + AEO (Answer-Engine Optimization) content engine for any startup, founder, or marketing team.**
 
-Fleo researches live search results, real Reddit and Quora discussions, and your own website to write fact-checked, citation-verified articles designed to rank on Google **and** get cited by ChatGPT, Perplexity, Claude, and Google AI Overviews — then exports ready-to-publish files for **any** website stack.
+[![CI](https://github.com/openairlabs/fleo-by-flyweel/actions/workflows/ci.yml/badge.svg)](https://github.com/openairlabs/fleo-by-flyweel/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/%40flyweel-labs%2Ffleo?label=npm&color=0ea5e9)](https://www.npmjs.com/package/@flyweel-labs/fleo)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-10b981.svg)](./LICENSE)
+[![Node.js >= 22](https://img.shields.io/badge/Node.js-%3E%3D22-339933.svg)](https://nodejs.org)
+[![Python >= 3.10](https://img.shields.io/badge/Python-Auto--Managed%20(%3E%3D3.10)-3776ab.svg)](./tui/lib/pythonBootstrap.ts)
+[![Release](https://img.shields.io/badge/Release-v0.1.0%20Early%20Public-f59e0b.svg)](./CHANGELOG.md)
+
+[60-Second Quickstart](#60-second-quickstart-no-coding-required) · [How to Publish](#how-to-publish-to-your-website-even-without-touching-code) · [Architecture](#system-architecture-overview) · [CLI Reference](#cli--headless-automation-reference) · [Security](#security--trust-boundaries)
+
+</div>
+
+Fleo researches live search results, real Reddit and Quora discussions, and your own website to write fact-checked, citation-verified articles designed to rank on Google **and** get cited by ChatGPT, Perplexity, Claude, and Google AI Overviews, then exports ready-to-publish files for **any** website stack.
 
 > Sequel to [`openairlabs/flyweel-agentic-seo-aeo-engine`](https://github.com/openairlabs/flyweel-agentic-seo-aeo-engine) · Sister tool to [`openairlabs/seo-aeo-audit`](https://github.com/openairlabs/seo-aeo-audit) · Built and open-sourced by [Flyweel](https://www.flyweel.co)
 
@@ -543,10 +551,10 @@ pnpm install
 pnpm build
 
 # 3. Run the 4 required CI verification gates (all run 100% offline, no API keys needed)
-./venv/bin/pytest tests/ -m unit -q               # 680+ Python unit & security tests
+./venv/bin/pytest tests/ -m unit -q               # 700 Python unit & security tests
 ./venv/bin/python eval/run_quality_eval.py --ci   # Deterministic SEO/AEO/readability regression gate
 pnpm typecheck                                    # TypeScript strict check (`tsc --noEmit`)
-pnpm test                                         # 185 Vitest + ink-testing-library TUI tests
+pnpm test                                         # 187 Vitest + ink-testing-library TUI tests
 ```
 
 Additional developer workflows:

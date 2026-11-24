@@ -1,0 +1,24 @@
+name: Feature request
+description: Suggest a new framework adapter, CMS integration, or workflow improvement
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: What workflow or publishing gap are you trying to solve?
+      placeholder: Example: We publish to Sanity CMS and would love a direct adapter or handoff template.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the behavior, CLI flag, or adapter output you would like to see.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Website stack or extra context (optional)
+      description: Framework, CMS, frontmatter schema, or links to relevant docs.

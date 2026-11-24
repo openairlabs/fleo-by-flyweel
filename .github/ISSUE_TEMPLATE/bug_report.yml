@@ -1,0 +1,54 @@
+name: Bug report
+description: Report a bug, crash, or framework output issue in Fleo by Flyweel
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting an issue during our early public release (`v0.1.0`).
+        **Security reminder:** Never paste your `.env` file, API keys, or private credentials in public issues.
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: A clear and concise description of the bug.
+      placeholder: Example: Running `npx @flyweel-labs/fleo detect-site-target` failed to detect my Astro content folder.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Exact commands, flags, or TUI steps that trigger the issue.
+      placeholder: |
+        1. Run `npx @flyweel-labs/fleo`
+        2. Go to Step 4 -> ...
+        3. See error ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What you expected to happen instead.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Fill in the details below so we can reproduce your setup.
+      value: |
+        - OS & Terminal (e.g. macOS iTerm2, Ubuntu, Windows WSL2):
+        - Node.js version (`node -v`):
+        - Python version (`python3 --version`):
+        - Fleo version (`npx @flyweel-labs/fleo --version`):
+        - Target stack / publish mode (Agent Handoff or Direct Repo + framework):
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs or terminal output (redacted)
+      description: Paste any stack traces or error messages after removing API keys and sensitive paths.
+      render: text
