@@ -11,7 +11,7 @@ pydantic>=2.9.0,<3
 
 # Interactive CLI
 click>=8.1.0,<9
-rich>=13.7.0,<16
+rich>=15.0.0,<16
 questionary==2.1.0
 prompt_toolkit==3.0.48
 PyYAML>=6.0.1,<7
