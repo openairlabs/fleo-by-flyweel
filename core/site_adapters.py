@@ -144,6 +144,17 @@ def _detect_framework_at_root(root: Path) -> Optional[FrameworkId]:
     return None
 
 
+def _find_owning_repo_root(start_dir: Path, max_depth: int = 6) -> Optional[Path]:
+    probe = start_dir
+    for _ in range(max_depth):
+        if _detect_framework_at_root(probe) is not None or (probe / ".git").exists():
+            return probe
+        if probe == probe.parent:
+            break
+        probe = probe.parent
+    return None
+
+
 def learn_site_contract_from_repo(
     target_repo_dir: Path,
     content_dir: Optional[Path] = None,
@@ -160,29 +171,19 @@ def learn_site_contract_from_repo(
         explicit_content_dir = raw_cd.resolve() if raw_cd.is_absolute() else (root / raw_cd).resolve()
         if not explicit_content_dir.exists() or not explicit_content_dir.is_dir():
             raise FileNotFoundError(f"Content directory does not exist: {explicit_content_dir}")
-        # If the explicit content_dir lives outside target_path (or target_path has no framework/.git),
-        # walk up from explicit_content_dir to discover the owning website repository root.
-        if _detect_framework_at_root(root) is None and not (root / ".git").exists():
-            probe = explicit_content_dir.parent
-            for _ in range(6):
-                if probe == probe.parent:
-                    break
-                if _detect_framework_at_root(probe) is not None or (probe / ".git").exists():
-                    root = probe
-                    break
-                probe = probe.parent
+        # Re-anchor repo root from explicit_content_dir if it lies outside target_path
+        # or if target_path itself is not a repository/framework root.
+        outside_target = not explicit_content_dir.is_relative_to(root)
+        target_is_repo = _detect_framework_at_root(root) is not None or (root / ".git").exists()
+        if outside_target or not target_is_repo:
+            root = _find_owning_repo_root(explicit_content_dir.parent) or explicit_content_dir
     elif _detect_framework_at_root(target_path) is None and not (target_path / ".git").exists():
         # If the user passed a content subfolder directly (e.g. site/src/content/guides),
         # walk up to find the framework or git root while preserving the exact folder as content_dir.
-        probe = target_path.parent
-        for _ in range(6):
-            if probe == probe.parent:
-                break
-            if _detect_framework_at_root(probe) is not None or (probe / ".git").exists():
-                root = probe
-                explicit_content_dir = target_path
-                break
-            probe = probe.parent
+        owning = _find_owning_repo_root(target_path.parent)
+        if owning is not None:
+            root = owning
+            explicit_content_dir = target_path
 
     framework: FrameworkId = _detect_framework_at_root(root) or "markdown"
 

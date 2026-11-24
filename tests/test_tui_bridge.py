@@ -1002,3 +1002,23 @@ def test_detect_site_target_supports_content_dir_flag_and_json_payload(tmp_path,
     events3 = [json.loads(ln) for ln in capsys.readouterr().out.splitlines() if ln.strip()]
     contract3 = next(e for e in events3 if e["type"] == "artifact_ready")["data"]["contract"]
     assert contract3["content_dir"] == str(custom_dir.resolve())
+
+    # 4. Relative --content-dir pointing at a sibling repo from a .git workspace discovers sibling repo root
+    (ws / ".git").mkdir()
+    monkeypatch.setattr(sys, "stdin", io.StringIO(""))
+    rc4 = asyncio.run(
+        tui_bridge.async_main(["detect-site-target", "--content-dir", "../astro-custom/src/content/guides"])
+    )
+    assert rc4 == 0
+    events4 = [json.loads(ln) for ln in capsys.readouterr().out.splitlines() if ln.strip()]
+    contract4 = next(e for e in events4 if e["type"] == "artifact_ready")["data"]["contract"]
+    assert contract4["framework"] == "astro"
+    assert contract4["repo_root"] == str(site_repo.resolve())
+    assert contract4["content_dir"] == str(custom_dir.resolve())
+
+    # 5. detect_setup_status reflects active FLEO_BLOG_CONTENT_PATH env override over saved contract
+    override_dir = tmp_path / "env-override-posts"
+    override_dir.mkdir()
+    monkeypatch.setenv("FLEO_BLOG_CONTENT_PATH", str(override_dir))
+    status = detect_setup_status(ws)
+    assert status["siteTarget"]["contentDir"] == str(override_dir.resolve())

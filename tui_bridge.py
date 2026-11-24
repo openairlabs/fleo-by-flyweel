@@ -1007,12 +1007,9 @@ async def detect_site_target_cmd(args: argparse.Namespace) -> int:
             raw_repo_path = str(cli_repo_path or payload.get("repoPath") or "").strip()
             if not raw_repo_path and raw_content_dir:
                 cand_cd = Path(raw_content_dir).expanduser()
-                if cand_cd.is_absolute():
-                    repo_dir = cand_cd.resolve()
-                    explicit_cd: Optional[Path] = repo_dir
-                else:
-                    repo_dir = ws
-                    explicit_cd = cand_cd
+                resolved_cd = cand_cd.resolve() if cand_cd.is_absolute() else (ws / cand_cd).resolve()
+                repo_dir = resolved_cd
+                explicit_cd: Optional[Path] = resolved_cd
             else:
                 repo_dir = Path(raw_repo_path or str(ws)).expanduser().resolve()
                 explicit_cd = Path(raw_content_dir) if raw_content_dir else None

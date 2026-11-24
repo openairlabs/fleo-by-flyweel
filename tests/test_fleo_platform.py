@@ -357,7 +357,25 @@ def test_learn_site_contract_supports_explicit_content_dir_and_direct_subfolder(
     assert by_subfolder.existing_post_count == 1
     assert by_subfolder.description_key == "summary"
 
-    # 3. Missing explicit content_dir fails clearly
+    # 3. External absolute content_dir outside a different .git repo re-anchors to its owning repo (not target_repo_dir)
+    unrelated_repo = tmp_path / "unrelated-next"
+    unrelated_repo.mkdir()
+    (unrelated_repo / ".git").mkdir()
+    (unrelated_repo / "next.config.mjs").write_text("export default {};\n", encoding="utf-8")
+    reanchored = learn_site_contract_from_repo(unrelated_repo, content_dir=guides_dir)
+    assert reanchored.framework == "astro"
+    assert reanchored.repo_root == str(site_repo.resolve())
+    assert reanchored.content_dir == str(guides_dir.resolve())
+
+    # 4. External standalone folder with no owning framework/git root falls back to markdown at that folder
+    standalone = tmp_path / "standalone-posts"
+    standalone.mkdir()
+    standalone_contract = learn_site_contract_from_repo(unrelated_repo, content_dir=standalone)
+    assert standalone_contract.framework == "markdown"
+    assert standalone_contract.repo_root == str(standalone.resolve())
+    assert standalone_contract.content_dir == str(standalone.resolve())
+
+    # 5. Missing explicit content_dir fails clearly
     with pytest.raises(FileNotFoundError, match="Content directory does not exist"):
         learn_site_contract_from_repo(site_repo, content_dir=Path("src/content/does-not-exist"))
 
