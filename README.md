@@ -15,6 +15,9 @@ Fleo researches live search results, real Reddit and Quora discussions, and your
   <img src="./assets/fleo-demo.gif" alt="Fleo by Flyweel interactive terminal workflow demo" width="100%" />
 </p>
 
+> [!NOTE]
+> **Early public release (`v0.1.0`):** Fleo is live for early adopters and actively evolving. If you hit a bug, a framework quirk, or an edge case with your site stack, please [open an issue](https://github.com/openairlabs/fleo-by-flyweel/issues/new/choose) or send a PR.
+
 ---
 
 ## Table of Contents
@@ -40,6 +43,7 @@ Fleo researches live search results, real Reddit and Quora discussions, and your
 - [Workspace Files & Environment Reference](#workspace-files--environment-reference)
 - [Local Development, Testing & Quality Gates](#local-development-testing--quality-gates)
 - [Troubleshooting & FAQ](#troubleshooting--faq)
+- [Roadmap & Known Limitations](#roadmap--known-limitations)
 
 ---
 
@@ -578,6 +582,18 @@ Create one folder per brand (for example `~/brands/acme` and `~/brands/globex`) 
 
 If you use an OpenAI-only BYOK setup on OpenRouter with minimal OpenRouter wallet credits, calling Anthropic Claude for Step 3 (Polish) may return HTTP `402`. Fleo automatically recovers mid-run by falling back to your Draft model. To avoid the retry altogether, press `Ctrl+S` → **Choose Models per Step** → **Step 3 · Humanizer & Polish** and select **OpenAI GPT-6 Sol `[OpenAI / BYOK]`**.
 </details>
+
+---
+
+## Roadmap & Known Limitations
+
+Fleo `v0.1.0` ships the full end-to-end research, writing, citation verification, and multi-framework export pipeline. Current focus areas and known limitations:
+
+- **Direct Local Repo Publishing (`[Experimental]`)**: Works best on standard Markdown/MDX blog folders (`Next.js`, `Astro`, `Nuxt`, `SvelteKit`, `Remix`) and supports custom folder paths via Step 4 or `--content-dir`. Sites with custom MDX components, strict content schemas, or headless CMS pipelines should use the recommended **`agent-handoff.md`** workflow or align a local clone with your coding agent.
+- **CMS Connectors**: Webflow and Framer currently export Rich Text HTML, sanitized CMS CSVs, and head schema snippets (`agent-handoff.md` included). Direct API publishing for Webflow, Framer, Ghost, and Sanity is on the roadmap.
+- **Image & Diagram Generation**: Hero and section image prompts are emitted in `metadata.json` and `agent-handoff.md`; automated asset generation and upload adapters are planned.
+- **Windows Terminal Support**: Native macOS, Linux, and WSL2 terminals are the primary tested targets; native Windows PowerShell and cmd rendering edge cases are still being hardened.
+- **Model Presets**: Model defaults in `config/` evolve as newer models land on OpenRouter, Perplexity, and Google AI Studio. Bug reports, adapter improvements, and PRs are welcome in [Issues](https://github.com/openairlabs/fleo-by-flyweel/issues/new/choose).
 
 ---
 
