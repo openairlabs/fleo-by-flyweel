@@ -136,8 +136,11 @@ Pick whichever publishing workflow fits how you manage your site:
 > **Not confident configuring or customizing this?** Use **[Option A (`agent-handoff.md`)](#option-a-using-an-ai-builder-or-coding-assistant-lovable-cursor-claude-code-bolt-windsurf)** instead. It requires zero code changes and lets your coding agent inspect your site's exact conventions before writing and building.
 
 For standard blog setups:
-1. Point Fleo at your local website repository during Setup Step 4 (or run `npx @flyweel/fleo detect-site-target --repo-path ./your-site`).
-2. When your article finishes, press **`P`** (capital `P`) on the Preview or Output screen to write the adapted file directly into your blog content folder. *(Fleo never runs `git commit` or `git push` behind your back — always review the diff and run your site's build/typecheck before committing.)*
+1. Point Fleo at your local website repository during Setup Step 4, or pass a specific target content folder directly:
+   - **In the TUI Setup Step 4:** paste your repo root (and optionally enter a custom content folder path like `src/content/guides` on the next prompt), **or** paste the exact content subfolder path directly (Fleo walks up to detect your framework/git root while keeping your exact folder as the publish destination).
+   - **Via CLI:** run `npx @flyweel/fleo detect-site-target --repo-path ./your-site --content-dir src/content/guides` (or omit `--repo-path` and pass an absolute `--content-dir /abs/path/to/posts`).
+   - **Via `.env` override:** set `FLEO_BLOG_CONTENT_PATH=/abs/path/to/posts` to override `.fleo/site-contract.json` for a workspace.
+2. When your article finishes, press **`P`** (capital `P`) on the Preview or Output screen to write the adapted file directly into your target folder. *(Fleo never runs `git commit` or `git push` behind your back; always review the diff and run your site's build/typecheck before committing.)*
 
 #### Aligning a Cloned Copy of Fleo to Your Local Website Repo (Advanced)
 If your site uses custom content collections, strict schemas, custom MDX components, or strict formatting rules and you want direct repo publishing (`P`) to match your repo out of the box, **clone Fleo locally** and paste this prompt into your AI coding agent (Claude Code, Cursor, OpenCode, Codex, or Windsurf):
@@ -387,7 +390,7 @@ Many teams use OpenRouter with **BYOK (Bring Your Own Key)** for a single provid
 
 `core/site_adapters.py` decouples canonical article generation from framework-specific syntax:
 
-- **Automatic Repo Inspection (`learn_site_contract_from_repo`, Experimental)**: Best-effort inspection of framework config files (`next.config.*`, `astro.config.*`, `nuxt.config.*`, `svelte.config.*`, `remix.config.*`), standard blog content directories (`content/blog`, `src/content/blog`, `app/content/blog`, etc.), and up to 5 existing Markdown/MDX posts to learn common frontmatter keys (`title`, `description` vs. `summary` vs. `excerpt`, `publishDate` vs. `date` vs. `publishedAt`, `tags`, and image shape) into `.fleo/site-contract.json`. Does not parse custom Zod/Contentlayer schemas, bespoke MDX components, or repo formatters — use [`agent-handoff.md`](#option-a-using-an-ai-builder-or-coding-assistant-lovable-cursor-claude-code-bolt-windsurf) by default, or follow the [local clone alignment prompt](#aligning-a-cloned-copy-of-fleo-to-your-local-website-repo-advanced) for custom repos.
+- **Automatic Repo Inspection (`learn_site_contract_from_repo`, Experimental)**: Best-effort inspection of framework config files (`next.config.*`, `astro.config.*`, `nuxt.config.*`, `svelte.config.*`, `remix.config.*`), standard blog content directories (`content/blog`, `src/content/blog`, `app/content/blog`, etc.) or an explicit `--content-dir` / content subfolder path, and up to 5 existing Markdown/MDX posts to learn common frontmatter keys (`title`, `description` vs. `summary` vs. `excerpt`, `publishDate` vs. `date` vs. `publishedAt`, `tags`, and image shape) into `.fleo/site-contract.json`. Does not parse custom Zod/Contentlayer schemas, bespoke MDX components, or repo formatters. Use [`agent-handoff.md`](#option-a-using-an-ai-builder-or-coding-assistant-lovable-cursor-claude-code-bolt-windsurf) by default, or follow the [local clone alignment prompt](#aligning-a-cloned-copy-of-fleo-to-your-local-website-repo-advanced) for custom repos.
 - **Target Outputs by Framework**:
 
 | Target ID | Primary File | How Components, Schema & Prose Are Adapted |
@@ -442,6 +445,7 @@ npx @flyweel/fleo --no-tui
 # Non-interactive workspace setup helpers (emit JSONL progress on stdout)
 npx @flyweel/fleo scan-brand-url --url https://yourstartup.com
 npx @flyweel/fleo detect-site-target --repo-path ./your-website-repo
+npx @flyweel/fleo detect-site-target --repo-path ./your-website-repo --content-dir src/content/guides
 
 # Install companion skills into Claude Code, OpenCode, Cursor, and/or Windsurf
 npx @flyweel/fleo install-skill --agent all

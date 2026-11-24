@@ -117,17 +117,27 @@ def _configured_site_contract(repo_root: Optional[Path] = None) -> Dict[str, obj
     return {}
 
 
-def blog_content_path(value: Optional[Path] = None, repo_root: Optional[Path] = None) -> Path:
+def resolve_blog_content_target(
+    value: Optional[Path] = None,
+    repo_root: Optional[Path] = None,
+    env: Optional[Dict[str, str]] = None,
+) -> tuple[Path, Optional[str]]:
     if value is not None:
-        return Path(value).expanduser().resolve()
-    env_val = os.getenv("FLEO_BLOG_CONTENT_PATH") or os.getenv("ASTRO_BLOG_PATH")
-    if env_val:
-        return Path(env_val).expanduser().resolve()
+        return Path(value).expanduser().resolve(), None
+    source_env = os.environ if env is None else env
+    for key in ("FLEO_BLOG_CONTENT_PATH", "ASTRO_BLOG_PATH"):
+        raw = str(source_env.get(key) or "").strip()
+        if raw:
+            return Path(raw).expanduser().resolve(), key
     contract = _configured_site_contract(repo_root)
     contract_blog = contract.get("content_dir")
     if isinstance(contract_blog, str) and contract_blog.strip():
-        return Path(contract_blog).expanduser().resolve()
-    return (output_root(repo_root=repo_root) / "site-blog").resolve()
+        return Path(contract_blog).expanduser().resolve(), None
+    return (output_root(repo_root=repo_root) / "site-blog").resolve(), None
+
+
+def blog_content_path(value: Optional[Path] = None, repo_root: Optional[Path] = None) -> Path:
+    return resolve_blog_content_target(value=value, repo_root=repo_root)[0]
 
 
 def blog_assets_path(value: Optional[Path] = None, repo_root: Optional[Path] = None) -> Path:
@@ -234,6 +244,7 @@ __all__ = [
     "load_repo_env",
     "output_root",
     "resolve_beneath",
+    "resolve_blog_content_target",
     "site_contract_path",
     "site_snapshot_path",
     "validate_artifact_slug",

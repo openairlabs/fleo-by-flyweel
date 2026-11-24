@@ -215,7 +215,8 @@ export const SetupView = ({
   const [detectedStackHint, setDetectedStackHint] = useState<string>('nextjs');
 
   // Step 4: Website Target state
-  const [targetSubView, setTargetSubView] = useState<'menu' | 'pick-stack' | 'repo-path'>('menu');
+  const [targetSubView, setTargetSubView] = useState<'menu' | 'pick-stack' | 'repo-path' | 'content-dir'>('menu');
+  const [pendingRepoPath, setPendingRepoPath] = useState<string>(process.cwd());
 
   const resolveStepModel = (spec: PipelineStepModelSpec): {slug: string; isDefault: boolean} => {
     const tierDefault = spec.defaults[displayedTier];
@@ -277,7 +278,8 @@ export const SetupView = ({
     brandSubView === 'url-input' ||
     brandSubView === 'edit-draft-field' ||
     brandSubView === 'interview' ||
-    targetSubView === 'repo-path';
+    targetSubView === 'repo-path' ||
+    targetSubView === 'content-dir';
 
   useInput((input, key) => {
     if (busyMessage) return;
@@ -316,6 +318,10 @@ export const SetupView = ({
       }
       if (brandSubView !== 'menu') {
         setBrandSubView('menu');
+        return;
+      }
+      if (targetSubView === 'content-dir') {
+        setTargetSubView('repo-path');
         return;
       }
       if (targetSubView !== 'menu') {
@@ -443,7 +449,7 @@ export const SetupView = ({
     setWizStep('target');
   };
 
-  const handleSaveSiteTarget = async (payload: {mode: 'handoff' | 'repo'; framework?: string; repoPath?: string}) => {
+  const handleSaveSiteTarget = async (payload: {mode: 'handoff' | 'repo'; framework?: string; repoPath?: string; contentDir?: string}) => {
     setBusyMessage(payload.mode === 'repo' ? 'Inspecting repository framework & existing blog posts…' : 'Saving website stack preference…');
     const res = await runDetectSiteTargetAction(payload);
     setBusyMessage(null);
@@ -1169,11 +1175,11 @@ export const SetupView = ({
                 Experimental: Direct repo publish only auto-detects standard blog folders and basic frontmatter keys.
               </StatusMessage>
               <Text color={theme.colors.mutedForeground} wrap="wrap">
-                It does not read custom Zod/collection schemas, custom MDX components, or repo formatters. If unsure, press Esc and use Agent Handoff (agent-handoff.md) — or clone Fleo and align it to your site repo using the agent prompt in README.md.
+                It does not read custom Zod/collection schemas, custom MDX components, or repo formatters. If unsure, press Esc and use Agent Handoff (agent-handoff.md), or clone Fleo and align it to your site repo using the agent prompt in README.md.
               </Text>
               <Box marginTop={1} flexDirection="column">
                 <Text bold wrap="truncate-end">
-                  Enter the local path to your website repository:
+                  Enter your website repo path (or paste the exact blog/content folder path):
                 </Text>
                 <Text color={theme.colors.mutedForeground} wrap="truncate-end">
                   Best-effort detection for Next.js / Astro / Nuxt / SvelteKit / Remix (never auto-commits or pushes).
@@ -1182,14 +1188,48 @@ export const SetupView = ({
               <Box marginTop={1}>
                 <TextInput
                   key="repo-path-in"
-                  defaultValue={process.cwd()}
-                  placeholder="/path/to/your-website-repo"
-                  onSubmit={p => void handleSaveSiteTarget({mode: 'repo', repoPath: p.trim()})}
+                  defaultValue={pendingRepoPath}
+                  placeholder="/path/to/your-website-repo (or /path/to/repo/src/content/guides)"
+                  onSubmit={p => {
+                    const trimmed = p.trim() || process.cwd();
+                    setPendingRepoPath(trimmed);
+                    setTargetSubView('content-dir');
+                  }}
                 />
               </Box>
               <Box marginTop={1}>
                 <Text color={theme.colors.mutedForeground} wrap="truncate-end">
-                  Enter inspect repo · Esc back (use Agent Handoff)
+                  Enter next (optional folder override) · Esc back (use Agent Handoff)
+                </Text>
+              </Box>
+            </Box>
+          ) : null}
+
+          {targetSubView === 'content-dir' ? (
+            <Box flexDirection="column">
+              <Text bold wrap="truncate-end">
+                Optional: target folder path for published articles (leave blank to auto-detect):
+              </Text>
+              <Text color={theme.colors.mutedForeground} wrap="wrap">
+                Repo path: {pendingRepoPath}. Enter a path relative to the repo (e.g. src/content/guides) or an absolute folder path, or press Enter to auto-detect (if you already pasted a content folder above, leave blank).
+              </Text>
+              <Box marginTop={1}>
+                <TextInput
+                  key="content-dir-in"
+                  defaultValue=""
+                  placeholder="src/content/guides (leave blank to auto-detect)"
+                  onSubmit={dir =>
+                    void handleSaveSiteTarget({
+                      mode: 'repo',
+                      repoPath: pendingRepoPath,
+                      contentDir: dir.trim() || undefined,
+                    })
+                  }
+                />
+              </Box>
+              <Box marginTop={1}>
+                <Text color={theme.colors.mutedForeground} wrap="truncate-end">
+                  Enter inspect & save target · Esc back to repo path
                 </Text>
               </Box>
             </Box>
@@ -1206,6 +1246,17 @@ export const SetupView = ({
               items={[
                 ['Brand Profile', status?.brandConfigured ? `${status.brandName} (${status.brandSiteUrl || status.brandCategory})` : 'Educational / Unbranded Mode'],
                 ['Website Target', status?.siteTarget?.frameworkLabel ?? 'Agent Handoff (.md)'],
+                ...(status?.siteTarget?.contentDir &&
+                (status.siteTarget.contentDirOverrideEnv || status.siteTarget.mode === 'repo')
+                  ? [
+                      [
+                        'Publish Folder',
+                        status.siteTarget.contentDirOverrideEnv
+                          ? `${status.siteTarget.contentDir} (${status.siteTarget.contentDirOverrideEnv} override)`
+                          : status.siteTarget.contentDir,
+                      ] as [string, string],
+                    ]
+                  : []),
                 [
                   'Pipeline Models',
                   customStepCount > 0 ? `${customStepCount} custom step(s) (${displayedTier})` : `Recommended Defaults (${displayedTier})`,

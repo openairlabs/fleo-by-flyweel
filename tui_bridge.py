@@ -986,18 +986,34 @@ async def detect_site_target_cmd(args: argparse.Namespace) -> int:
         )
 
         ws = workspace_root()
-        cli_repo_path, cli_framework = getattr(args, "repo_path", None), getattr(args, "framework", None)
-        raw_stdin = "" if (cli_repo_path or cli_framework or sys.stdin.isatty()) else sys.stdin.read().strip()
+        cli_repo_path = getattr(args, "repo_path", None)
+        cli_content_dir = getattr(args, "content_dir", None)
+        cli_framework = getattr(args, "framework", None)
+        raw_stdin = "" if (cli_repo_path or cli_content_dir or cli_framework or sys.stdin.isatty()) else sys.stdin.read().strip()
         payload = json.loads(raw_stdin) if raw_stdin else {}
+        payload_content_dir = payload.get("contentDir") or payload.get("content_dir")
+        raw_content_dir = str(cli_content_dir or payload_content_dir or "").strip() or None
         mode = (
             "repo"
-            if cli_repo_path or (not cli_framework and not payload)
-            else ("handoff" if cli_framework else str(payload.get("mode") or ("repo" if payload.get("repoPath") else "handoff")).strip())
+            if cli_repo_path or cli_content_dir or (not cli_framework and not payload)
+            else (
+                "handoff"
+                if cli_framework
+                else str(payload.get("mode") or ("repo" if (payload.get("repoPath") or raw_content_dir) else "handoff")).strip()
+            )
         )
 
         if mode == "repo":
-            repo_dir = Path(str(cli_repo_path or payload.get("repoPath") or ws)).expanduser().resolve()
-            contract = learn_site_contract_from_repo(repo_dir)
+            raw_repo_path = str(cli_repo_path or payload.get("repoPath") or "").strip()
+            if not raw_repo_path and raw_content_dir:
+                cand_cd = Path(raw_content_dir).expanduser()
+                resolved_cd = cand_cd.resolve() if cand_cd.is_absolute() else (ws / cand_cd).resolve()
+                repo_dir = resolved_cd
+                explicit_cd: Optional[Path] = resolved_cd
+            else:
+                repo_dir = Path(raw_repo_path or str(ws)).expanduser().resolve()
+                explicit_cd = Path(raw_content_dir) if raw_content_dir else None
+            contract = learn_site_contract_from_repo(repo_dir, content_dir=explicit_cd)
         else:
             fw = str(cli_framework or payload.get("framework") or "markdown").strip().lower()
             if fw not in SUPPORTED_FRAMEWORKS:
@@ -1087,7 +1103,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     site_tgt = subparsers.add_parser("detect-site-target", help="Configure handoff framework or inspect a local website repo")
     site_tgt.add_argument("--run-id", default=None)
-    site_tgt.add_argument("--repo-path", default=None, help="Target website repository path")
+    site_tgt.add_argument("--repo-path", default=None, help="Target website repository path (or content subfolder)")
+    site_tgt.add_argument("--content-dir", default=None, help="Target folder path for published articles (relative to repo or absolute)")
     site_tgt.add_argument("--framework", default=None, help="Target handoff framework")
     site_tgt.add_argument("--verbose", action="store_true")
 

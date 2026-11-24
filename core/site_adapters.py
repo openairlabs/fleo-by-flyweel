@@ -130,23 +130,85 @@ def detect_framework_from_html(html_text: str) -> FrameworkId:
     return "markdown"
 
 
-def learn_site_contract_from_repo(target_repo_dir: Path) -> SiteContract:
-    """Inspect a local website repository to detect framework, blog folder, and frontmatter schema."""
-    root = Path(target_repo_dir).expanduser().resolve()
-    if not root.exists() or not root.is_dir():
-        raise FileNotFoundError(f"Repository directory does not exist: {root}")
-
-    framework: FrameworkId = "markdown"
+def _detect_framework_at_root(root: Path) -> Optional[FrameworkId]:
     if any(root.glob("next.config.*")) or any(root.glob("apps/*/next.config.*")):
-        framework = "nextjs"
-    elif any(root.glob("astro.config.*")) or any(root.glob("apps/*/astro.config.*")):
-        framework = "astro"
-    elif any(root.glob("nuxt.config.*")):
-        framework = "nuxt"
-    elif any(root.glob("svelte.config.*")):
-        framework = "sveltekit"
-    elif any(root.glob("remix.config.*")) or any(root.glob("react-router.config.*")):
-        framework = "remix"
+        return "nextjs"
+    if any(root.glob("astro.config.*")) or any(root.glob("apps/*/astro.config.*")):
+        return "astro"
+    if any(root.glob("nuxt.config.*")):
+        return "nuxt"
+    if any(root.glob("svelte.config.*")):
+        return "sveltekit"
+    if any(root.glob("remix.config.*")) or any(root.glob("react-router.config.*")):
+        return "remix"
+    return None
+
+
+_REPO_META_DOCS = {
+    "readme.md",
+    "changelog.md",
+    "contributing.md",
+    "code_of_conduct.md",
+    "security.md",
+    "license.md",
+    "claude.md",
+    "agents.md",
+}
+
+
+def _find_owning_repo_root(start_dir: Path, max_depth: int = 6) -> Optional[Path]:
+    return next(
+        (
+            p
+            for p in (start_dir, *start_dir.parents)[:max_depth]
+            if _detect_framework_at_root(p) is not None or (p / ".git").exists()
+        ),
+        None,
+    )
+
+
+def learn_site_contract_from_repo(
+    target_repo_dir: Path,
+    content_dir: Optional[Path] = None,
+) -> SiteContract:
+    """Inspect a local website repository (or content subfolder) to detect framework, folder, and frontmatter schema."""
+    target_path = Path(target_repo_dir).expanduser().resolve()
+    if not target_path.exists() or not target_path.is_dir():
+        raise FileNotFoundError(f"Repository directory does not exist: {target_path}")
+
+    root = target_path
+    explicit_content_dir: Optional[Path] = None
+    if content_dir is not None and str(content_dir).strip():
+        raw_cd = Path(str(content_dir).strip()).expanduser()
+        explicit_content_dir = raw_cd.resolve() if raw_cd.is_absolute() else (root / raw_cd).resolve()
+        if not explicit_content_dir.exists() or not explicit_content_dir.is_dir():
+            raise FileNotFoundError(f"Content directory does not exist: {explicit_content_dir}")
+        # Re-anchor repo root from explicit_content_dir if it lies outside target_path
+        # or if target_path itself is not a repository/framework root.
+        outside_target = not explicit_content_dir.is_relative_to(root)
+        target_is_repo = _detect_framework_at_root(root) is not None or (root / ".git").exists()
+        if outside_target or not target_is_repo:
+            root = _find_owning_repo_root(explicit_content_dir) or explicit_content_dir
+        else:
+            nested_fw_root = next(
+                (
+                    p
+                    for p in (explicit_content_dir, *explicit_content_dir.parents)
+                    if p != root and p.is_relative_to(root) and _detect_framework_at_root(p) is not None
+                ),
+                None,
+            )
+            if nested_fw_root is not None:
+                root = nested_fw_root
+    elif _detect_framework_at_root(target_path) is None and not (target_path / ".git").exists():
+        # If the user passed a content subfolder directly (e.g. site/src/content/guides),
+        # walk up to find the framework or git root while preserving the exact folder as content_dir.
+        owning = _find_owning_repo_root(target_path.parent)
+        if owning is not None:
+            root = owning
+            explicit_content_dir = target_path
+
+    framework: FrameworkId = _detect_framework_at_root(root) or "markdown"
 
     candidate_dirs = [
         "content/blog",
@@ -164,23 +226,41 @@ def learn_site_contract_from_repo(target_repo_dir: Path) -> SiteContract:
         "blog",
         "posts",
     ]
-    content_dir: Optional[Path] = None
+    resolved_content_dir: Optional[Path] = None
     post_files: List[Path] = []
-    for rel in candidate_dirs:
-        cand = root / rel
+    search_dirs = [explicit_content_dir] if explicit_content_dir is not None else [root / rel for rel in candidate_dirs]
+    for cand in search_dirs:
         if cand.is_dir():
             found = [
                 p for p in sorted(cand.rglob("*"))
                 if p.suffix.lower() in {".mdx", ".md", ".svx"} and not p.name.startswith("_")
             ]
-            if found:
-                content_dir = cand
+            if found or explicit_content_dir is not None:
+                resolved_content_dir = cand
                 post_files = found
                 break
-            if content_dir is None:
-                content_dir = cand
+            if resolved_content_dir is None:
+                resolved_content_dir = cand
 
-    if content_dir is None:
+    if (
+        resolved_content_dir is None
+        and explicit_content_dir is None
+        and _detect_framework_at_root(root) is None
+        and not (root / ".git").exists()
+    ):
+        direct_posts = [
+            p
+            for p in sorted(root.iterdir())
+            if p.is_file()
+            and p.suffix.lower() in {".mdx", ".md", ".svx"}
+            and not p.name.startswith("_")
+            and p.name.lower() not in _REPO_META_DOCS
+        ]
+        if direct_posts:
+            resolved_content_dir = root
+            post_files = direct_posts
+
+    if resolved_content_dir is None:
         default_rel = {
             "nextjs": "content/blog",
             "astro": "src/content/blog",
@@ -189,7 +269,8 @@ def learn_site_contract_from_repo(target_repo_dir: Path) -> SiteContract:
             "remix": "app/content/blog",
             "markdown": "content/blog",
         }.get(framework, "content/blog")
-        content_dir = root / default_rel
+        resolved_content_dir = root / default_rel
+    content_dir = resolved_content_dir
 
     ext_default = ".mdx" if framework in {"nextjs", "astro"} else ".md"
     if post_files:

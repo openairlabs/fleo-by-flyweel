@@ -326,6 +326,103 @@ def test_detect_site_contract_discovers_remix_app_content_blog_posts(tmp_path):
     assert contract.date_key == "publishedAt"
 
 
+def test_learn_site_contract_supports_explicit_content_dir_and_direct_subfolder(tmp_path):
+    from core.site_adapters import learn_site_contract_from_repo
+
+    site_repo = tmp_path / "astro-site"
+    guides_dir = site_repo / "src" / "content" / "guides"
+    guides_dir.mkdir(parents=True)
+    (site_repo / "astro.config.mjs").write_text("export default {};\n", encoding="utf-8")
+    (guides_dir / "getting-started.mdx").write_text(
+        '---\ntitle: "Getting Started"\nsummary: "Quick guide"\npublishedAt: "2026-11-10"\nheroImage: "/img/start.png"\n---\n\nBody\n',
+        encoding="utf-8",
+    )
+
+    # 1. Explicit relative content_dir override
+    by_override = learn_site_contract_from_repo(site_repo, content_dir=Path("src/content/guides"))
+    assert by_override.framework == "astro"
+    assert by_override.repo_root == str(site_repo.resolve())
+    assert by_override.content_dir == str(guides_dir.resolve())
+    assert by_override.existing_post_count == 1
+    assert by_override.description_key == "summary"
+    assert by_override.date_key == "publishedAt"
+    assert by_override.image_key == "heroImage"
+    assert by_override.image_is_string is True
+
+    # 2. Pasting the content subfolder path directly walks up to find the Astro repo root
+    by_subfolder = learn_site_contract_from_repo(guides_dir)
+    assert by_subfolder.framework == "astro"
+    assert by_subfolder.repo_root == str(site_repo.resolve())
+    assert by_subfolder.content_dir == str(guides_dir.resolve())
+    assert by_subfolder.existing_post_count == 1
+    assert by_subfolder.description_key == "summary"
+
+    # 3. External absolute content_dir outside a different .git repo re-anchors to its owning repo (not target_repo_dir)
+    unrelated_repo = tmp_path / "unrelated-next"
+    unrelated_repo.mkdir()
+    (unrelated_repo / ".git").mkdir()
+    (unrelated_repo / "next.config.mjs").write_text("export default {};\n", encoding="utf-8")
+    reanchored = learn_site_contract_from_repo(unrelated_repo, content_dir=guides_dir)
+    assert reanchored.framework == "astro"
+    assert reanchored.repo_root == str(site_repo.resolve())
+    assert reanchored.content_dir == str(guides_dir.resolve())
+
+    # 4. External Astro repo nested inside a parent .git repo detects Astro at content_dir itself (not parent .git)
+    mono_git = tmp_path / "mono-git"
+    nested_astro = mono_git / "astro-app"
+    nested_astro.mkdir(parents=True)
+    (mono_git / ".git").mkdir()
+    (nested_astro / "astro.config.mjs").write_text("export default {};\n", encoding="utf-8")
+    nested_contract = learn_site_contract_from_repo(unrelated_repo, content_dir=nested_astro)
+    assert nested_contract.framework == "astro"
+    assert nested_contract.repo_root == str(nested_astro.resolve())
+    assert nested_contract.content_dir == str(nested_astro.resolve())
+
+    # 4b. Monorepo Git root passed with content_dir inside a nested framework app detects the nested app root
+    nested_guides = nested_astro / "src" / "content" / "guides"
+    nested_guides.mkdir(parents=True)
+    mono_nested = learn_site_contract_from_repo(mono_git, content_dir=Path("astro-app/src/content/guides"))
+    assert mono_nested.framework == "astro"
+    assert mono_nested.repo_root == str(nested_astro.resolve())
+    assert mono_nested.content_dir == str(nested_guides.resolve())
+    assert mono_nested.file_extension == ".mdx"
+
+    # 5. Standalone Markdown folder with direct posts (no .git/framework root) retains that folder and samples posts
+    standalone_with_posts = tmp_path / "standalone-with-posts"
+    standalone_with_posts.mkdir()
+    (standalone_with_posts / "README.md").write_text("# Repo readme\n", encoding="utf-8")
+    (standalone_with_posts / "hello.md").write_text(
+        '---\ntitle: "Hello"\nsummary: "Direct note"\n---\n\nBody\n',
+        encoding="utf-8",
+    )
+    direct_contract = learn_site_contract_from_repo(standalone_with_posts)
+    assert direct_contract.framework == "markdown"
+    assert direct_contract.repo_root == str(standalone_with_posts.resolve())
+    assert direct_contract.content_dir == str(standalone_with_posts.resolve())
+    assert direct_contract.existing_post_count == 1
+    assert direct_contract.description_key == "summary"
+
+    # 6. Plain folder with only README.md (no posts) keeps default content/blog fallback
+    readme_only = tmp_path / "readme-only"
+    readme_only.mkdir()
+    (readme_only / "README.md").write_text("# Just a readme\n", encoding="utf-8")
+    readme_only_contract = learn_site_contract_from_repo(readme_only)
+    assert readme_only_contract.content_dir == str((readme_only / "content" / "blog").resolve())
+    assert readme_only_contract.existing_post_count == 0
+
+    # 7. External standalone folder with no owning framework/git root falls back to markdown at that folder
+    standalone = tmp_path / "standalone-posts"
+    standalone.mkdir()
+    standalone_contract = learn_site_contract_from_repo(unrelated_repo, content_dir=standalone)
+    assert standalone_contract.framework == "markdown"
+    assert standalone_contract.repo_root == str(standalone.resolve())
+    assert standalone_contract.content_dir == str(standalone.resolve())
+
+    # 8. Missing explicit content_dir fails clearly
+    with pytest.raises(FileNotFoundError, match="Content directory does not exist"):
+        learn_site_contract_from_repo(site_repo, content_dir=Path("src/content/does-not-exist"))
+
+
 @pytest.mark.asyncio
 async def test_content_generator_passes_its_brand_profile_to_smart_ai_router(monkeypatch):
     import core.generator as gen_mod

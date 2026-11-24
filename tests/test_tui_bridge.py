@@ -947,3 +947,92 @@ def test_detect_site_target_accepts_repo_path_flag_and_empty_stdin(tmp_path, mon
     events2 = [json.loads(ln) for ln in capsys.readouterr().out.splitlines() if ln.strip()]
     ready2 = next(e for e in events2 if e["type"] == "artifact_ready")
     assert ready2["data"]["contract"]["framework"] == "nextjs"
+
+
+def test_detect_site_target_supports_content_dir_flag_and_json_payload(tmp_path, monkeypatch, capsys):
+    import io
+
+    site_repo = tmp_path / "astro-custom"
+    custom_dir = site_repo / "src" / "content" / "guides"
+    custom_dir.mkdir(parents=True)
+    (site_repo / "astro.config.mjs").write_text("export default {};\n", encoding="utf-8")
+    (custom_dir / "alpha.mdx").write_text(
+        '---\ntitle: "Alpha"\nexcerpt: "Short excerpt"\npubDate: "2026-11-20"\n---\n\nBody\n',
+        encoding="utf-8",
+    )
+
+    ws = tmp_path / "ws"
+    ws.mkdir()
+    monkeypatch.setenv("FLEO_WORKDIR", str(ws))
+    monkeypatch.setattr(sys, "stdin", io.StringIO(""))
+
+    # 1. CLI --repo-path + relative --content-dir
+    rc = asyncio.run(
+        tui_bridge.async_main(
+            ["detect-site-target", "--repo-path", str(site_repo), "--content-dir", "src/content/guides"]
+        )
+    )
+    assert rc == 0
+    events = [json.loads(ln) for ln in capsys.readouterr().out.splitlines() if ln.strip()]
+    contract = next(e for e in events if e["type"] == "artifact_ready")["data"]["contract"]
+    assert contract["framework"] == "astro"
+    assert contract["repo_root"] == str(site_repo.resolve())
+    assert contract["content_dir"] == str(custom_dir.resolve())
+    assert contract["description_key"] == "excerpt"
+    assert contract["date_key"] == "pubDate"
+
+    # 2. CLI absolute --content-dir alone walks up to discover Astro repo root
+    monkeypatch.setattr(sys, "stdin", io.StringIO(""))
+    rc2 = asyncio.run(tui_bridge.async_main(["detect-site-target", "--content-dir", str(custom_dir)]))
+    assert rc2 == 0
+    events2 = [json.loads(ln) for ln in capsys.readouterr().out.splitlines() if ln.strip()]
+    contract2 = next(e for e in events2 if e["type"] == "artifact_ready")["data"]["contract"]
+    assert contract2["framework"] == "astro"
+    assert contract2["repo_root"] == str(site_repo.resolve())
+    assert contract2["content_dir"] == str(custom_dir.resolve())
+
+    # 3. Stdin JSON payload with contentDir from the TUI Setup Wizard
+    monkeypatch.setattr(
+        sys,
+        "stdin",
+        io.StringIO(json.dumps({"mode": "repo", "repoPath": str(site_repo), "contentDir": "src/content/guides"})),
+    )
+    rc3 = asyncio.run(tui_bridge.async_main(["detect-site-target"]))
+    assert rc3 == 0
+    events3 = [json.loads(ln) for ln in capsys.readouterr().out.splitlines() if ln.strip()]
+    contract3 = next(e for e in events3 if e["type"] == "artifact_ready")["data"]["contract"]
+    assert contract3["content_dir"] == str(custom_dir.resolve())
+
+    # 4. Relative --content-dir pointing at a sibling repo from a .git workspace discovers sibling repo root
+    (ws / ".git").mkdir()
+    monkeypatch.setattr(sys, "stdin", io.StringIO(""))
+    rc4 = asyncio.run(
+        tui_bridge.async_main(["detect-site-target", "--content-dir", "../astro-custom/src/content/guides"])
+    )
+    assert rc4 == 0
+    events4 = [json.loads(ln) for ln in capsys.readouterr().out.splitlines() if ln.strip()]
+    contract4 = next(e for e in events4 if e["type"] == "artifact_ready")["data"]["contract"]
+    assert contract4["framework"] == "astro"
+    assert contract4["repo_root"] == str(site_repo.resolve())
+    assert contract4["content_dir"] == str(custom_dir.resolve())
+
+    # 5. detect_setup_status prioritizes workspace .env FLEO_BLOG_CONTENT_PATH over process ASTRO_BLOG_PATH and reports source
+    override_dir = tmp_path / "env-override-posts"
+    override_dir.mkdir()
+    legacy_dir = tmp_path / "legacy-posts"
+    legacy_dir.mkdir()
+    (ws / ".env").write_text(f"FLEO_BLOG_CONTENT_PATH={override_dir}\n", encoding="utf-8")
+    monkeypatch.delenv("FLEO_BLOG_CONTENT_PATH", raising=False)
+    monkeypatch.setenv("ASTRO_BLOG_PATH", str(legacy_dir))
+    status = detect_setup_status(ws)
+    assert status["siteTarget"]["contentDir"] == str(override_dir.resolve())
+    assert status["siteTarget"]["contentDirOverrideEnv"] == "FLEO_BLOG_CONTENT_PATH"
+
+    # 6. Whitespace-only FLEO_BLOG_CONTENT_PATH resolves identically in blog_content_path and detect_setup_status
+    from core.paths import blog_content_path
+
+    monkeypatch.setenv("FLEO_BLOG_CONTENT_PATH", "   ")
+    assert blog_content_path(repo_root=ws) == legacy_dir.resolve()
+    status_ws = detect_setup_status(ws)
+    assert status_ws["siteTarget"]["contentDir"] == str(legacy_dir.resolve())
+    assert status_ws["siteTarget"]["contentDirOverrideEnv"] == "ASTRO_BLOG_PATH"

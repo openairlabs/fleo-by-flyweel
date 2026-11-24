@@ -5,9 +5,10 @@ import React from 'react';
 import {Box} from 'ink';
 import {render} from 'ink-testing-library';
 import stringWidth from 'string-width';
-import {describe, expect, it} from 'vitest';
+import {describe, expect, it, vi} from 'vitest';
 
 import {SetupView} from '../../tui/components/setupView.js';
+import * as setupActions from '../../tui/setupActions.js';
 import {installBundledSkills} from '../../tui/cli.js';
 import {ThemeProvider} from '../../tui/components/ui/theme-provider.js';
 import {ensurePythonRuntime} from '../../tui/lib/pythonBootstrap.js';
@@ -317,6 +318,83 @@ describe('First-Time TUI Setup Wizard', () => {
     expect(frame).toContain('Experimental: Direct repo publish');
     expect(frame).toContain('agent-handoff.md');
     expect(frame).toContain('README.md');
+
+    // Submitting repo path advances to optional custom content folder path input
+    stdin.write('\r');
+    await tick();
+    const contentDirFrame = lastFrame() ?? '';
+    expect(contentDirFrame).toContain('target folder path for published articles');
+    expect(contentDirFrame).toContain('leave blank to auto-detect');
+
+    // Pressing Esc returns cleanly to the repo path prompt
+    stdin.write('\x1b');
+    await tick();
+    expect(lastFrame() ?? '').toContain('Experimental: Direct repo publish');
     unmount();
+  });
+
+  it('displays status.siteTarget.contentDir and bridge override metadata rather than process.env in Step 5', async () => {
+    const prevAstro = process.env.ASTRO_BLOG_PATH;
+    const prevFleo = process.env.FLEO_BLOG_CONTENT_PATH;
+    process.env.ASTRO_BLOG_PATH = '/publish/legacy';
+    delete process.env.FLEO_BLOG_CONTENT_PATH;
+    const spy = vi.spyOn(setupActions, 'runDetectSiteTargetAction').mockResolvedValue({events: []});
+
+    try {
+      const state = createInitialState({
+        step: 'setup',
+        setupStatus: {
+          checks: [
+            {id: 'venv', label: 'Python engine runtime', required: true, ok: true, detail: '/usr/bin/python3'},
+            {id: 'ai_credentials', label: 'AI model credentials', required: true, ok: true, detail: 'OPENROUTER_API_KEY'},
+          ],
+          canGenerate: true,
+          requiredMissing: [],
+          optionalMissing: [],
+          onboardingComplete: true,
+          brandConfigured: true,
+          brandName: 'Acme',
+          siteTarget: {
+            mode: 'handoff',
+            framework: 'nextjs',
+            frameworkLabel: 'Next.js',
+            contentDir: '/publish/fleo',
+            contentDirOverrideEnv: 'FLEO_BLOG_CONTENT_PATH',
+            existingPostCount: 0,
+          },
+        },
+      });
+
+      const {lastFrame, stdin, unmount} = render(
+        <ThemeProvider>
+          <LayoutContext.Provider value={{columns: 120, rows: 34, bodyRows: 26}}>
+            <SetupView state={state} dispatch={() => {}} />
+          </LayoutContext.Provider>
+        </ThemeProvider>,
+      );
+
+      // Hub -> option 4 (target) -> option 0 (Agent Handoff) -> option 0 (Next.js) -> Step 5 ready
+      for (let i = 0; i < 4; i++) {
+        stdin.write('\x1b[B');
+        await tick();
+      }
+      stdin.write('\r');
+      await tick();
+      stdin.write('\r');
+      await tick();
+      stdin.write('\r');
+      await tick(60);
+
+      const frame = lastFrame() ?? '';
+      expect(frame).toContain('/publish/fleo (FLEO_BLOG_CONTENT_PATH override)');
+      expect(frame).not.toContain('/publish/legacy');
+      unmount();
+    } finally {
+      spy.mockRestore();
+      if (prevAstro === undefined) delete process.env.ASTRO_BLOG_PATH;
+      else process.env.ASTRO_BLOG_PATH = prevAstro;
+      if (prevFleo === undefined) delete process.env.FLEO_BLOG_CONTENT_PATH;
+      else process.env.FLEO_BLOG_CONTENT_PATH = prevFleo;
+    }
   });
 });

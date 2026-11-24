@@ -71,7 +71,7 @@ export const runSaveBrandProfileAction = async (
 };
 
 export const runDetectSiteTargetAction = async (
-  payload: {mode: 'handoff' | 'repo'; framework?: string; repoPath?: string},
+  payload: {mode: 'handoff' | 'repo'; framework?: string; repoPath?: string; contentDir?: string},
 ): Promise<{events: BridgeEvent[]; diagnostic?: string}> => {
   const result = await runBridgeOnce(
     ['tui_bridge.py', 'detect-site-target', '--run-id', `target_${Date.now().toString(36)}`],

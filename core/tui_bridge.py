@@ -220,7 +220,15 @@ _STDLIB_FRAMEWORK_LABELS = {
 def detect_setup_status(repo_root: Optional[Path] = None) -> Dict[str, Any]:
     from types import SimpleNamespace
     from .agent_credentials import AGENT_ROLES_META, can_generate_with_credentials, resolve_all_roles
-    from .paths import PACKAGE_ROOT, blog_content_path, brand_profile_path, fleo_dir, output_root, site_contract_path, workspace_root
+    from .paths import (
+        PACKAGE_ROOT,
+        brand_profile_path,
+        fleo_dir,
+        output_root,
+        resolve_blog_content_target,
+        site_contract_path,
+        workspace_root,
+    )
 
     ws = workspace_root(repo_root)
     env_path = ws / ".env"
@@ -230,7 +238,6 @@ def detect_setup_status(repo_root: Optional[Path] = None) -> Dict[str, Any]:
         output_path.mkdir(parents=True, exist_ok=True)
     except OSError:
         pass
-    resolved_blog_path = blog_content_path(repo_root=ws)
 
     merged_env: Dict[str, str] = {}
     for candidate_env in (pkg_env_path, env_path):
@@ -251,6 +258,8 @@ def detect_setup_status(repo_root: Optional[Path] = None) -> Dict[str, Any]:
     for k, v in os.environ.items():
         if v:
             merged_env[k] = v
+
+    effective_blog_path, content_dir_override_env = resolve_blog_content_target(repo_root=ws, env=merged_env)
 
     def has_env_key(name: str) -> bool:
         return bool(merged_env.get(name, "").strip())
@@ -378,9 +387,9 @@ def detect_setup_status(repo_root: Optional[Path] = None) -> Dict[str, Any]:
             "id": "site_target",
             "label": "Website target",
             "required": False,
-            "ok": contract.mode == "handoff" or resolved_blog_path.exists(),
+            "ok": contract.mode == "handoff" or effective_blog_path.exists(),
             "detail": (
-                f"Connected {FRAMEWORK_LABELS.get(contract.framework, contract.framework)} → {contract.content_dir}"
+                f"Connected {FRAMEWORK_LABELS.get(contract.framework, contract.framework)} → {effective_blog_path}"
                 if contract.mode == "repo"
                 else f"Agent Handoff (.md) · {FRAMEWORK_LABELS.get(contract.framework, contract.framework)}"
             ),
@@ -420,7 +429,8 @@ def detect_setup_status(repo_root: Optional[Path] = None) -> Dict[str, Any]:
             "mode": contract.mode,
             "framework": contract.framework,
             "frameworkLabel": FRAMEWORK_LABELS.get(contract.framework, contract.framework),
-            "contentDir": contract.content_dir or str(resolved_blog_path),
+            "contentDir": str(effective_blog_path),
+            "contentDirOverrideEnv": content_dir_override_env,
             "existingPostCount": contract.existing_post_count,
         },
         "agentRoles": agent_roles_summary,
