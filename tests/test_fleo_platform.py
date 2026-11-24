@@ -378,6 +378,15 @@ def test_learn_site_contract_supports_explicit_content_dir_and_direct_subfolder(
     assert nested_contract.repo_root == str(nested_astro.resolve())
     assert nested_contract.content_dir == str(nested_astro.resolve())
 
+    # 4b. Monorepo Git root passed with content_dir inside a nested framework app detects the nested app root
+    nested_guides = nested_astro / "src" / "content" / "guides"
+    nested_guides.mkdir(parents=True)
+    mono_nested = learn_site_contract_from_repo(mono_git, content_dir=Path("astro-app/src/content/guides"))
+    assert mono_nested.framework == "astro"
+    assert mono_nested.repo_root == str(nested_astro.resolve())
+    assert mono_nested.content_dir == str(nested_guides.resolve())
+    assert mono_nested.file_extension == ".mdx"
+
     # 5. Standalone Markdown folder with direct posts (no .git/framework root) retains that folder and samples posts
     standalone_with_posts = tmp_path / "standalone-with-posts"
     standalone_with_posts.mkdir()

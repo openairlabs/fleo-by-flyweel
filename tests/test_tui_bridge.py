@@ -1027,3 +1027,12 @@ def test_detect_site_target_supports_content_dir_flag_and_json_payload(tmp_path,
     status = detect_setup_status(ws)
     assert status["siteTarget"]["contentDir"] == str(override_dir.resolve())
     assert status["siteTarget"]["contentDirOverrideEnv"] == "FLEO_BLOG_CONTENT_PATH"
+
+    # 6. Whitespace-only FLEO_BLOG_CONTENT_PATH resolves identically in blog_content_path and detect_setup_status
+    from core.paths import blog_content_path
+
+    monkeypatch.setenv("FLEO_BLOG_CONTENT_PATH", "   ")
+    assert blog_content_path(repo_root=ws) == legacy_dir.resolve()
+    status_ws = detect_setup_status(ws)
+    assert status_ws["siteTarget"]["contentDir"] == str(legacy_dir.resolve())
+    assert status_ws["siteTarget"]["contentDirOverrideEnv"] == "ASTRO_BLOG_PATH"

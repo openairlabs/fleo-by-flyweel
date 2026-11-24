@@ -189,6 +189,17 @@ def learn_site_contract_from_repo(
         target_is_repo = _detect_framework_at_root(root) is not None or (root / ".git").exists()
         if outside_target or not target_is_repo:
             root = _find_owning_repo_root(explicit_content_dir) or explicit_content_dir
+        else:
+            nested_fw_root = next(
+                (
+                    p
+                    for p in (explicit_content_dir, *explicit_content_dir.parents)
+                    if p != root and p.is_relative_to(root) and _detect_framework_at_root(p) is not None
+                ),
+                None,
+            )
+            if nested_fw_root is not None:
+                root = nested_fw_root
     elif _detect_framework_at_root(target_path) is None and not (target_path / ".git").exists():
         # If the user passed a content subfolder directly (e.g. site/src/content/guides),
         # walk up to find the framework or git root while preserving the exact folder as content_dir.
