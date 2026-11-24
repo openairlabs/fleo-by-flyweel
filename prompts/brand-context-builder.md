@@ -1,6 +1,6 @@
 # Fleo Brand Context Builder Prompt (Works in ChatGPT, Claude, Cursor, or OpenCode)
 
-Copy everything inside the prompt block below into your favorite AI assistant. Save the markdown output it produces to **`.agents/product-marketing.md`** in the folder where you run `npx @flyweel/fleo` — Fleo automatically imports it on launch!
+Copy everything inside the prompt block below into your favorite AI assistant. Save the markdown output it produces to **`.agents/product-marketing.md`** in the folder where you run `npx @flyweel-labs/fleo`; Fleo automatically imports it on launch!
 
 ---
 

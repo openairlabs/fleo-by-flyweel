@@ -1,7 +1,7 @@
 {
-  "name": "@flyweel/fleo",
+  "name": "@flyweel-labs/fleo",
   "version": "0.1.0",
-  "description": "Fleo by Flyweel — Company-agnostic open-source AI SEO + AEO content engine with multi-model research, TUI setup wizard, multi-framework adapters, and universal agent handoff packets.",
+  "description": "Fleo by Flyweel: company-agnostic open-source AI SEO + AEO content engine with multi-model research, TUI setup wizard, multi-framework adapters, and universal agent handoff packets.",
   "license": "MIT",
   "author": "Flyweel <hello@flyweel.co> (https://www.flyweel.co)",
   "repository": {
