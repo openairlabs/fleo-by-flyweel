@@ -10,7 +10,7 @@ beautifulsoup4==4.12.3
 pydantic>=2.9.0,<3
 
 # Interactive CLI
-click>=8.1.0,<9
+click>=8.5.1,<9
 rich>=13.7.0,<16
 questionary==2.1.0
 prompt_toolkit==3.0.48
