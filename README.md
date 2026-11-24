@@ -1,6 +1,6 @@
 # Fleo by Flyweel (`@flyweel-labs/fleo`)
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-10b981.svg)](./LICENSE)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-10b981.svg)](./LICENSE)
 [![Node.js >= 22](https://img.shields.io/badge/Node.js-%3E%3D22-339933.svg)](https://nodejs.org)
 [![Python >= 3.10](https://img.shields.io/badge/Python-Auto--Managed%20(%3E%3D3.10)-3776ab.svg)](./tui/lib/pythonBootstrap.ts)
 [![Stacks](https://img.shields.io/badge/Works%20With-Next.js%20%7C%20Astro%20%7C%20Webflow%20%7C%20Framer%20%7C%20Nuxt%20%7C%20SvelteKit%20%7C%20Remix-6366f1.svg)](#multi-framework-site-learner--output-adapters)
@@ -74,7 +74,7 @@ Fleo optimizes every article for **both at the same time**.
 ## Why Teams Use Fleo
 
 - **Zero Hallucinated Links or Fake Features** — Every external citation is checked against a live research ledger before saving; invented URLs are automatically stripped. Product mentions are locked to your verified Brand Profile.
-- **Pennies Per Article, Zero SaaS Lock-In** — Fleo is 100% free and MIT-licensed. Bring your own [OpenRouter](https://openrouter.ai/keys) key and pay raw model cost: roughly **$0.23 per 2,500-word article** on the default Balanced preset (or **~$0.76** on Max flagship models), instead of $200–$500/month content subscriptions.
+- **Pennies Per Article, Zero SaaS Lock-In:** Fleo is 100% free and Apache-2.0 licensed. Bring your own [OpenRouter](https://openrouter.ai/keys) key and pay raw model cost: roughly **$0.23 per 2,500-word article** on the default Balanced preset (or **~$0.76** on Max flagship models), instead of $200–$500/month content subscriptions.
 - **Works With Any Website Stack** — Native exports for **Next.js**, **Astro**, **Webflow**, **Framer**, **Nuxt**, **SvelteKit**, **Remix**, and **Universal Markdown**.
 - **"Drop Into Any AI Builder" Mode (`agent-handoff.md`)** — Don't want to connect Fleo to your codebase? Every run generates a single `agent-handoff.md` file you can paste or drag into **Lovable, Bolt, v0, Cursor, Claude Code, Windsurf, or OpenCode**. It tells your builder exactly how to publish the post with full SEO/AEO intact.
 - **Optional Google Search Console Guardrails** — Connect Search Console to automatically spot keyword cannibalization (so two of your own posts don't fight each other) and score real traffic opportunity before you spend a cent generating.
@@ -603,4 +603,4 @@ Fleo `v0.1.0` ships the full end-to-end research, writing, citation verification
 - **Security Policy & Vulnerability Reporting**: [`SECURITY.md`](./SECURITY.md) (GitHub Private Vulnerability Reporting)
 - **Code of Conduct**: [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md)
 - **Changelog**: [`CHANGELOG.md`](./CHANGELOG.md)
-- **License**: [MIT](./LICENSE) — Built by [Flyweel](https://www.flyweel.co) as an open-source contribution for marketers, founders, and builders.
+- **License**: [Apache-2.0](./LICENSE) (see [`NOTICE`](./NOTICE)). Built by [Flyweel](https://www.flyweel.co) as an open-source contribution for marketers, founders, and builders.

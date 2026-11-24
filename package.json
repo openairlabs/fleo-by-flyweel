@@ -2,7 +2,7 @@
   "name": "@flyweel-labs/fleo",
   "version": "0.1.0",
   "description": "Fleo by Flyweel: company-agnostic open-source AI SEO + AEO content engine with multi-model research, TUI setup wizard, multi-framework adapters, and universal agent handoff packets.",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "author": "Flyweel <hello@flyweel.co> (https://www.flyweel.co)",
   "repository": {
     "type": "git",
@@ -34,7 +34,8 @@
     "requirements.txt",
     ".env.example",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "NOTICE"
   ],
   "scripts": {
     "clean": "node -e \"fs.rmSync('dist',{recursive:true,force:true})\"",
