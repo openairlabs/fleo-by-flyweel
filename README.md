@@ -11,6 +11,10 @@ Fleo researches live search results, real Reddit and Quora discussions, and your
 
 > Sequel to [`openairlabs/flyweel-agentic-seo-aeo-engine`](https://github.com/openairlabs/flyweel-agentic-seo-aeo-engine) · Sister tool to [`openairlabs/seo-aeo-audit`](https://github.com/openairlabs/seo-aeo-audit) · Built and open-sourced by [Flyweel](https://www.flyweel.co)
 
+<p align="center">
+  <img src="./assets/fleo-demo.gif" alt="Fleo by Flyweel interactive terminal workflow demo" width="100%" />
+</p>
+
 ---
 
 ## Table of Contents
