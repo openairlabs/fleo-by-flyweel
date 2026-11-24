@@ -48,7 +48,7 @@ export const OutputView = ({state, dispatch, onQuit}: {state: AppState; dispatch
     ...(canAct
       ? [{value: 'save', label: state.saveState === 'done' ? 'Save locally again (+ agent-handoff.md)' : 'Save locally (+ agent-handoff.md & schema.json)'}]
       : []),
-    ...(canAct ? [{value: 'publish', label: `Publish directly to ${targetLabel}…`}] : []),
+    ...(canAct ? [{value: 'publish', label: `Publish directly to ${targetLabel} [Experimental]…`}] : []),
     ...(canAct ? [{value: 'preview', label: 'Back to preview'}] : []),
     {value: 'new', label: 'Start a new article'},
     {value: 'quit', label: 'Quit'},
@@ -86,13 +86,18 @@ export const OutputView = ({state, dispatch, onQuit}: {state: AppState; dispatch
       {state.publishState === 'running' ? <Spinner label={`Publishing to ${targetLabel}…`} /> : null}
       <Box marginTop={1} flexDirection="column">
         {state.publishArmed ? (
-          <Box borderStyle="single" borderColor={theme.colors.warning} paddingX={1}>
-            <Text color={theme.colors.warning}>Publish to {publishTargetPath}? </Text>
-            <ConfirmInput
-              defaultChoice="cancel"
-              onConfirm={() => dispatch({type: 'request_publish'})}
-              onCancel={() => dispatch({type: 'escape'})}
-            />
+          <Box borderStyle="single" borderColor={theme.colors.warning} paddingX={1} flexDirection="column">
+            <Box>
+              <Text color={theme.colors.warning}>[Experimental] Publish to {publishTargetPath}? </Text>
+              <ConfirmInput
+                defaultChoice="cancel"
+                onConfirm={() => dispatch({type: 'request_publish'})}
+                onCancel={() => dispatch({type: 'escape'})}
+              />
+            </Box>
+            <Text color={theme.colors.mutedForeground} wrap="truncate-end">
+              Writes directly without running repo checks/formatters. Prefer agent-handoff.md for custom schemas or MDX components.
+            </Text>
           </Box>
         ) : (
           <OptionList options={options} initialIndex={0} onSelect={onSelect} isActive={!state.publishArmed} />

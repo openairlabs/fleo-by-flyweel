@@ -94,7 +94,7 @@ On your first run, Fleo opens a full-screen, arrow-key guided wizard:
 1. **Step 1 · Engine Check** — Automatically creates an isolated Python runtime inside `~/.fleo/venv` so nothing conflicts with the rest of your computer.
 2. **Step 2 · API Key & AI Models** — Paste your single `OPENROUTER_API_KEY`. Every pipeline step comes pre-configured with a **`[Default · Recommended]`** model, or you can open **Choose Models per Step** to switch models with the arrow keys (no model IDs to memorize).
 3. **Step 3 · Your Company & Brand** — Paste your website URL (e.g. `https://yourstartup.com`) and Fleo scans your pages to learn your products, pricing, audience pain points, competitors, and tone. *(No live site yet? Pick the 5-question interview instead.)*
-4. **Step 4 · How You Publish** — Pick **Agent Handoff Packet** (choose `Next.js`, `Astro`, `Webflow`, `Framer`, `Nuxt`, `SvelteKit`, `Remix`, or `Markdown`) **or** point Fleo at a local website folder for 1-click publishing.
+4. **Step 4 · How You Publish** — Pick **Agent Handoff Packet (`agent-handoff.md`)** *(Recommended — works safely with `Next.js`, `Astro`, `Webflow`, `Framer`, `Nuxt`, `SvelteKit`, `Remix`, or `Markdown`)*, **or** connect a local website repo for direct file publishing *(Experimental — best-effort for standard blogs; see [Option C](#option-c-direct-publish-to-a-local-website-repo-experimental))*.
 5. **Step 5 · Write Your First Article** — Type a topic (or press **`Ctrl+G`** to have Fleo brainstorm high-intent article ideas for your audience), press **`Enter`**, and watch each research and writing stage complete live.
 
 > **Tip:** Need to change your API key, switch AI models, or re-scan your website later? Press **`Ctrl+S`** anytime from the home Configure screen (or run `npx @flyweel/fleo setup`).
@@ -128,9 +128,40 @@ Pick whichever publishing workflow fits how you manage your site:
 2. Import **`<slug>.cms.csv`** directly into your Webflow or Framer Blog CMS Collection (or paste `<slug>.webflow.html` / `<slug>.framer.html` into your Rich Text field).
 3. Paste **`<slug>.head-schema.html`** into the post's custom `<head>` code slot so Google and AI search engines see your FAQ and article schema.
 
-### Option C: Connected Local Website Repo (1-Click Publish)
-1. Point Fleo at your local website repository during Setup (or via `npx @flyweel/fleo detect-site-target --repo-path ./your-site`).
-2. When your article finishes, press **`P`** (capital `P`) on the Preview or Output screen to write the adapted post directly into your blog content folder. *(Fleo never runs `git commit` or `git push` behind your back — you review the diff first.)*
+### Option C: Direct Publish to a Local Website Repo *(Experimental)*
+
+> [!WARNING]
+> **Experimental feature:** Direct repo publishing (`P`) is best-effort and only auto-detects standard blog directories (such as `content/blog` or `src/content/blog`) and basic frontmatter keys. It does **not** automatically parse strict Zod / Content Collection / Contentlayer schemas, custom required frontmatter fields, bespoke MDX components, or repo formatting/linting rules (Prettier/ESLint).
+>
+> **Not confident configuring or customizing this?** Use **[Option A (`agent-handoff.md`)](#option-a-using-an-ai-builder-or-coding-assistant-lovable-cursor-claude-code-bolt-windsurf)** instead. It requires zero code changes and lets your coding agent inspect your site's exact conventions before writing and building.
+
+For standard blog setups:
+1. Point Fleo at your local website repository during Setup Step 4 (or run `npx @flyweel/fleo detect-site-target --repo-path ./your-site`).
+2. When your article finishes, press **`P`** (capital `P`) on the Preview or Output screen to write the adapted file directly into your blog content folder. *(Fleo never runs `git commit` or `git push` behind your back — always review the diff and run your site's build/typecheck before committing.)*
+
+#### Aligning a Cloned Copy of Fleo to Your Local Website Repo (Advanced)
+If your site uses custom content collections, strict schemas, custom MDX components, or strict formatting rules and you want direct repo publishing (`P`) to match your repo out of the box, **clone Fleo locally** and paste this prompt into your AI coding agent (Claude Code, Cursor, OpenCode, Codex, or Windsurf):
+
+```text
+Align my local clone of Fleo (<PATH_TO_CLONED_FLEO>) so its experimental direct-repo publishing mode matches my local website repository (<PATH_TO_MY_SITE_REPO>).
+
+1. Inspect my website repository first:
+   - Identify the framework config, content collection directory, and schema definitions (e.g., Astro src/content/config.ts, Contentlayer/Velite/Zod schemas, or CMS types).
+   - Read 2–3 existing published posts to capture exact frontmatter keys, value types (dates, author format, tags/categories, image fields, required custom fields), and file extensions.
+   - Check the blog layout/route for existing JSON-LD and FAQ rendering, any custom MDX components/templates, and formatting/lint rules (Prettier/ESLint).
+
+2. Inspect my local Fleo clone:
+   - Read core/site_adapters.py, core/publisher.py, core/repo_extractor.py, and core/mdx_security.py.
+
+3. Update ONLY my local Fleo clone's adapter/contract/publisher logic so direct publishing (`P`) writes posts that conform to my website repo's exact folder, frontmatter schema, conventions, and formatting:
+   - Keep all fail-closed security boundaries in core/mdx_security.py intact (do not weaken URL, tag, ESM, or expression checks).
+   - Do not auto-commit or auto-push in either repository.
+   - Keep `agent-handoff.md` generation working as a fallback.
+
+4. Verify before finishing:
+   - Run Fleo's unit tests (`./venv/bin/pytest tests/ -m unit -q`) and fix any regressions.
+   - Test a sample publish to a throwaway slug in my website repo (or temp copy) and run my website repo's typecheck/build (e.g., `astro check`, `next build`) to confirm zero schema or build errors, then remove the throwaway test file.
+```
 
 ---
 
@@ -173,7 +204,7 @@ The bottom bar of the app always shows the shortcuts available on your current s
 | `Ctrl+O` | Review / Preview | Expand the draft or final article to full-screen reading view (`PgUp`/`PgDn` to scroll) |
 | `i` | Preview | Toggle article metadata & Quality Scorecard summary |
 | `s` | Preview / Output | Save all adapted files + `agent-handoff.md` to `output/generations/` |
-| `P` *(Shift+p)* | Preview / Output | Publish directly into your connected local website repo |
+| `P` *(Shift+p)* | Preview / Output | Publish directly into your connected local website repo *(Experimental — prefer `s` + `agent-handoff.md` for custom schemas)* |
 | `n` | Output | Start a new article |
 | `l` | Any screen | Toggle live diagnostic & event log drawer |
 | `?` | Any screen | Open keyboard shortcut help overlay |
@@ -356,7 +387,7 @@ Many teams use OpenRouter with **BYOK (Bring Your Own Key)** for a single provid
 
 `core/site_adapters.py` decouples canonical article generation from framework-specific syntax:
 
-- **Automatic Repo Inspection (`learn_site_contract_from_repo`)**: Inspects framework config files (`next.config.*`, `astro.config.*`, `nuxt.config.*`, `svelte.config.*`, `remix.config.*`), locates content directories (`content/blog`, `src/content/blog`, `app/content/blog`, etc.), and samples existing Markdown/MDX frontmatter to learn your exact field names (`title`, `description` vs. `summary` vs. `excerpt`, `publishDate` vs. `date` vs. `publishedAt`, `tags`, and image shape) into `.fleo/site-contract.json`.
+- **Automatic Repo Inspection (`learn_site_contract_from_repo`, Experimental)**: Best-effort inspection of framework config files (`next.config.*`, `astro.config.*`, `nuxt.config.*`, `svelte.config.*`, `remix.config.*`), standard blog content directories (`content/blog`, `src/content/blog`, `app/content/blog`, etc.), and up to 5 existing Markdown/MDX posts to learn common frontmatter keys (`title`, `description` vs. `summary` vs. `excerpt`, `publishDate` vs. `date` vs. `publishedAt`, `tags`, and image shape) into `.fleo/site-contract.json`. Does not parse custom Zod/Contentlayer schemas, bespoke MDX components, or repo formatters — use [`agent-handoff.md`](#option-a-using-an-ai-builder-or-coding-assistant-lovable-cursor-claude-code-bolt-windsurf) by default, or follow the [local clone alignment prompt](#aligning-a-cloned-copy-of-fleo-to-your-local-website-repo-advanced) for custom repos.
 - **Target Outputs by Framework**:
 
 | Target ID | Primary File | How Components, Schema & Prose Are Adapted |

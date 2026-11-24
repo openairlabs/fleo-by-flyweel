@@ -264,4 +264,59 @@ describe('First-Time TUI Setup Wizard', () => {
       rmSync(tmpHome, {recursive: true, force: true});
     }
   });
+
+  it('marks direct local repo publishing as Experimental in Step 4 and shows fallback guidance on select', async () => {
+    const state = createInitialState({
+      step: 'setup',
+      setupStatus: {
+        checks: [
+          {id: 'venv', label: 'Python engine runtime', required: true, ok: true, detail: '/usr/bin/python3'},
+          {id: 'ai_credentials', label: 'AI model credentials', required: true, ok: true, detail: 'OPENROUTER_API_KEY'},
+        ],
+        canGenerate: true,
+        requiredMissing: [],
+        optionalMissing: [],
+        onboardingComplete: true,
+        brandConfigured: true,
+        brandName: 'Acme',
+      },
+    });
+
+    const {lastFrame, stdin, unmount} = render(
+      <ThemeProvider>
+        <LayoutContext.Provider value={{columns: 110, rows: 34, bodyRows: 26}}>
+          <SetupView state={state} dispatch={() => {}} />
+        </LayoutContext.Provider>
+      </ThemeProvider>,
+    );
+
+    // Hub shows Step 4 with Experimental label
+    expect(lastFrame()).toContain('Direct Repo Publish (Experimental)');
+    // Move down 4 items in Setup Hub to option 4 (index 4: target) and press Enter
+    stdin.write('\x1b[B');
+    await tick();
+    stdin.write('\x1b[B');
+    await tick();
+    stdin.write('\x1b[B');
+    await tick();
+    stdin.write('\x1b[B');
+    await tick();
+    stdin.write('\r');
+    await tick();
+
+    expect(lastFrame()).toContain('Agent Handoff Packet (agent-handoff.md)');
+    expect(lastFrame()).toContain('Connect Local Website Git Repo [Experimental]');
+
+    // Select the Experimental repo option (index 1) -> shows warning + agent-handoff.md fallback guidance
+    stdin.write('\x1b[B');
+    await tick();
+    stdin.write('\r');
+    await tick();
+
+    const frame = lastFrame() ?? '';
+    expect(frame).toContain('Experimental: Direct repo publish');
+    expect(frame).toContain('agent-handoff.md');
+    expect(frame).toContain('README.md');
+    unmount();
+  });
 });

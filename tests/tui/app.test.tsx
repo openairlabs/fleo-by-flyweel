@@ -466,7 +466,7 @@ describe('Ink app shell', () => {
     expect(lastFrame()).toContain('/tmp/final.mdx');
     expect(lastFrame()).toContain('/tmp/raw.mdx');
     expect(lastFrame()).toContain('/tmp/acme-site/content/blog');
-    expect(lastFrame()).toContain('Publish directly to connected site…');
+    expect(lastFrame()).toContain('Publish directly to connected site [Experimental]…');
     expect(lastFrame()).toContain('Start a new article');
     unmount();
   });
@@ -480,13 +480,13 @@ describe('Ink app shell', () => {
         config={{keyword: 'lead routing'}}
       />,
     );
-    expect(lastFrame()).toContain('Publish to /tmp/site-blog?');
+    expect(lastFrame()).toContain('[Experimental] Publish to /tmp/site-blog?');
     stdin.write('n');
     await tick();
     expect(lastFrame()).not.toContain('Publish to /tmp/site-blog?');
     stdin.write('P');
     await tick();
-    expect(lastFrame()).toContain('Publish to /tmp/site-blog?');
+    expect(lastFrame()).toContain('[Experimental] Publish to /tmp/site-blog?');
     stdin.write('y');
     await tick();
     expect(lastFrame()).toContain('Publishing to connected site…');

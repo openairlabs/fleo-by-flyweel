@@ -644,7 +644,7 @@ export const SetupView = ({
                 {value: 'keys', label: '1 · Edit API Keys'},
                 {value: 'models', label: '2 · Choose Models per Pipeline Step (Default / Recommended)'},
                 {value: 'brand', label: '3 · Scan Website or Edit Brand Context'},
-                {value: 'target', label: '4 · Change Website Framework / Connect Repo'},
+                {value: 'target', label: '4 · Change Website Stack / Direct Repo Publish (Experimental)'},
                 {value: 'test', label: '5 · Run Live API Connectivity Test'},
               ]}
               onSelect={val => {
@@ -1121,11 +1121,11 @@ export const SetupView = ({
                   options={[
                     {
                       value: 'handoff',
-                      label: '✦ Agent Handoff Packet (.md) — Drop into Cursor, Claude Code, Lovable, Webflow, or Framer (Recommended)',
+                      label: '✦ Agent Handoff Packet (agent-handoff.md) — Cursor, Claude Code, Lovable, Webflow, Framer (Recommended)',
                     },
                     {
                       value: 'repo',
-                      label: '✦ Connect Local Website Git Repo — Direct 1-click publish (Next.js, Astro, Nuxt, SvelteKit, Remix)',
+                      label: '✦ Connect Local Website Git Repo [Experimental] — Direct file write (standard blogs only)',
                     },
                   ]}
                   onSelect={val => {
@@ -1165,12 +1165,20 @@ export const SetupView = ({
 
           {targetSubView === 'repo-path' ? (
             <Box flexDirection="column">
-              <Text bold wrap="truncate-end">
-                Enter the local path to your website repository:
+              <StatusMessage tone="warning">
+                Experimental: Direct repo publish only auto-detects standard blog folders and basic frontmatter keys.
+              </StatusMessage>
+              <Text color={theme.colors.mutedForeground} wrap="wrap">
+                It does not read custom Zod/collection schemas, custom MDX components, or repo formatters. If unsure, press Esc and use Agent Handoff (agent-handoff.md) — or clone Fleo and align it to your site repo using the agent prompt in README.md.
               </Text>
-              <Text color={theme.colors.mutedForeground} wrap="truncate-end">
-                Fleo will auto-detect Next.js / Astro / Nuxt / SvelteKit / Remix and learn your existing frontmatter fields.
-              </Text>
+              <Box marginTop={1} flexDirection="column">
+                <Text bold wrap="truncate-end">
+                  Enter the local path to your website repository:
+                </Text>
+                <Text color={theme.colors.mutedForeground} wrap="truncate-end">
+                  Best-effort detection for Next.js / Astro / Nuxt / SvelteKit / Remix (never auto-commits or pushes).
+                </Text>
+              </Box>
               <Box marginTop={1}>
                 <TextInput
                   key="repo-path-in"
@@ -1181,7 +1189,7 @@ export const SetupView = ({
               </Box>
               <Box marginTop={1}>
                 <Text color={theme.colors.mutedForeground} wrap="truncate-end">
-                  Enter inspect repo · Esc back
+                  Enter inspect repo · Esc back (use Agent Handoff)
                 </Text>
               </Box>
             </Box>

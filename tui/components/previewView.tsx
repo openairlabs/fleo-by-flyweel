@@ -130,7 +130,7 @@ export const PreviewView = ({state, active}: {state: AppState; active: boolean})
     <Box flexDirection="column">
       <KeyValue items={summaryItems} />
       {state.saveState === 'running' ? <Spinner label="Saving locally…" /> : null}
-      {state.publishState === 'running' ? <Spinner label="Publishing to Astro…" /> : null}
+      {state.publishState === 'running' ? <Spinner label="Publishing to connected site…" /> : null}
       <Box marginTop={1} flexDirection="column">
         {showInfo ? (
           <>
