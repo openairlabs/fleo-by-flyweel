@@ -81,7 +81,7 @@
     "ink": "^7.1.0",
     "picocolors": "^1.1.1",
     "react": "^19.2.3",
-    "string-width": "^7.2.0"
+    "string-width": "^9.0.0"
   },
   "devDependencies": {
     "@types/node": "^24.10.3",
