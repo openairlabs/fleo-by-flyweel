@@ -367,7 +367,41 @@ def test_learn_site_contract_supports_explicit_content_dir_and_direct_subfolder(
     assert reanchored.repo_root == str(site_repo.resolve())
     assert reanchored.content_dir == str(guides_dir.resolve())
 
-    # 4. External standalone folder with no owning framework/git root falls back to markdown at that folder
+    # 4. External Astro repo nested inside a parent .git repo detects Astro at content_dir itself (not parent .git)
+    mono_git = tmp_path / "mono-git"
+    nested_astro = mono_git / "astro-app"
+    nested_astro.mkdir(parents=True)
+    (mono_git / ".git").mkdir()
+    (nested_astro / "astro.config.mjs").write_text("export default {};\n", encoding="utf-8")
+    nested_contract = learn_site_contract_from_repo(unrelated_repo, content_dir=nested_astro)
+    assert nested_contract.framework == "astro"
+    assert nested_contract.repo_root == str(nested_astro.resolve())
+    assert nested_contract.content_dir == str(nested_astro.resolve())
+
+    # 5. Standalone Markdown folder with direct posts (no .git/framework root) retains that folder and samples posts
+    standalone_with_posts = tmp_path / "standalone-with-posts"
+    standalone_with_posts.mkdir()
+    (standalone_with_posts / "README.md").write_text("# Repo readme\n", encoding="utf-8")
+    (standalone_with_posts / "hello.md").write_text(
+        '---\ntitle: "Hello"\nsummary: "Direct note"\n---\n\nBody\n',
+        encoding="utf-8",
+    )
+    direct_contract = learn_site_contract_from_repo(standalone_with_posts)
+    assert direct_contract.framework == "markdown"
+    assert direct_contract.repo_root == str(standalone_with_posts.resolve())
+    assert direct_contract.content_dir == str(standalone_with_posts.resolve())
+    assert direct_contract.existing_post_count == 1
+    assert direct_contract.description_key == "summary"
+
+    # 6. Plain folder with only README.md (no posts) keeps default content/blog fallback
+    readme_only = tmp_path / "readme-only"
+    readme_only.mkdir()
+    (readme_only / "README.md").write_text("# Just a readme\n", encoding="utf-8")
+    readme_only_contract = learn_site_contract_from_repo(readme_only)
+    assert readme_only_contract.content_dir == str((readme_only / "content" / "blog").resolve())
+    assert readme_only_contract.existing_post_count == 0
+
+    # 7. External standalone folder with no owning framework/git root falls back to markdown at that folder
     standalone = tmp_path / "standalone-posts"
     standalone.mkdir()
     standalone_contract = learn_site_contract_from_repo(unrelated_repo, content_dir=standalone)
@@ -375,7 +409,7 @@ def test_learn_site_contract_supports_explicit_content_dir_and_direct_subfolder(
     assert standalone_contract.repo_root == str(standalone.resolve())
     assert standalone_contract.content_dir == str(standalone.resolve())
 
-    # 5. Missing explicit content_dir fails clearly
+    # 8. Missing explicit content_dir fails clearly
     with pytest.raises(FileNotFoundError, match="Content directory does not exist"):
         learn_site_contract_from_repo(site_repo, content_dir=Path("src/content/does-not-exist"))
 

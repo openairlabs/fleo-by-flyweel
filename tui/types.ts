@@ -124,6 +124,7 @@ export interface SiteTargetStatus {
   framework: string;
   frameworkLabel: string;
   contentDir: string;
+  contentDirOverrideEnv?: string | null;
   existingPostCount: number;
 }
 

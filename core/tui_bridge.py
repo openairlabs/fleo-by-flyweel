@@ -404,10 +404,13 @@ def detect_setup_status(repo_root: Optional[Path] = None) -> Dict[str, Any]:
         for meta in AGENT_ROLES_META
     ]
 
-    env_blog_override = (merged_env.get("FLEO_BLOG_CONTENT_PATH") or merged_env.get("ASTRO_BLOG_PATH") or "").strip()
+    content_dir_override_env = next(
+        (key for key in ("FLEO_BLOG_CONTENT_PATH", "ASTRO_BLOG_PATH") if merged_env.get(key, "").strip()),
+        None,
+    )
     effective_content_dir = (
-        str(Path(env_blog_override).expanduser().resolve())
-        if env_blog_override
+        str(Path(merged_env[content_dir_override_env].strip()).expanduser().resolve())
+        if content_dir_override_env
         else (contract.content_dir or str(resolved_blog_path))
     )
 
@@ -428,6 +431,7 @@ def detect_setup_status(repo_root: Optional[Path] = None) -> Dict[str, Any]:
             "framework": contract.framework,
             "frameworkLabel": FRAMEWORK_LABELS.get(contract.framework, contract.framework),
             "contentDir": effective_content_dir,
+            "contentDirOverrideEnv": content_dir_override_env,
             "existingPostCount": contract.existing_post_count,
         },
         "agentRoles": agent_roles_summary,

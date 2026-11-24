@@ -1016,9 +1016,14 @@ def test_detect_site_target_supports_content_dir_flag_and_json_payload(tmp_path,
     assert contract4["repo_root"] == str(site_repo.resolve())
     assert contract4["content_dir"] == str(custom_dir.resolve())
 
-    # 5. detect_setup_status reflects active FLEO_BLOG_CONTENT_PATH env override over saved contract
+    # 5. detect_setup_status prioritizes workspace .env FLEO_BLOG_CONTENT_PATH over process ASTRO_BLOG_PATH and reports source
     override_dir = tmp_path / "env-override-posts"
     override_dir.mkdir()
-    monkeypatch.setenv("FLEO_BLOG_CONTENT_PATH", str(override_dir))
+    legacy_dir = tmp_path / "legacy-posts"
+    legacy_dir.mkdir()
+    (ws / ".env").write_text(f"FLEO_BLOG_CONTENT_PATH={override_dir}\n", encoding="utf-8")
+    monkeypatch.delenv("FLEO_BLOG_CONTENT_PATH", raising=False)
+    monkeypatch.setenv("ASTRO_BLOG_PATH", str(legacy_dir))
     status = detect_setup_status(ws)
     assert status["siteTarget"]["contentDir"] == str(override_dir.resolve())
+    assert status["siteTarget"]["contentDirOverrideEnv"] == "FLEO_BLOG_CONTENT_PATH"

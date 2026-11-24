@@ -144,6 +144,18 @@ def _detect_framework_at_root(root: Path) -> Optional[FrameworkId]:
     return None
 
 
+_REPO_META_DOCS = {
+    "readme.md",
+    "changelog.md",
+    "contributing.md",
+    "code_of_conduct.md",
+    "security.md",
+    "license.md",
+    "claude.md",
+    "agents.md",
+}
+
+
 def _find_owning_repo_root(start_dir: Path, max_depth: int = 6) -> Optional[Path]:
     return next(
         (
@@ -176,7 +188,7 @@ def learn_site_contract_from_repo(
         outside_target = not explicit_content_dir.is_relative_to(root)
         target_is_repo = _detect_framework_at_root(root) is not None or (root / ".git").exists()
         if outside_target or not target_is_repo:
-            root = _find_owning_repo_root(explicit_content_dir.parent) or explicit_content_dir
+            root = _find_owning_repo_root(explicit_content_dir) or explicit_content_dir
     elif _detect_framework_at_root(target_path) is None and not (target_path / ".git").exists():
         # If the user passed a content subfolder directly (e.g. site/src/content/guides),
         # walk up to find the framework or git root while preserving the exact folder as content_dir.
@@ -218,6 +230,24 @@ def learn_site_contract_from_repo(
                 break
             if resolved_content_dir is None:
                 resolved_content_dir = cand
+
+    if (
+        resolved_content_dir is None
+        and explicit_content_dir is None
+        and _detect_framework_at_root(root) is None
+        and not (root / ".git").exists()
+    ):
+        direct_posts = [
+            p
+            for p in sorted(root.iterdir())
+            if p.is_file()
+            and p.suffix.lower() in {".mdx", ".md", ".svx"}
+            and not p.name.startswith("_")
+            and p.name.lower() not in _REPO_META_DOCS
+        ]
+        if direct_posts:
+            resolved_content_dir = root
+            post_files = direct_posts
 
     if resolved_content_dir is None:
         default_rel = {
