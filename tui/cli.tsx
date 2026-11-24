@@ -202,11 +202,13 @@ export const buildProgram = () => {
   program
     .command('detect-site-target')
     .description('Detect website framework and content contract for the current workspace')
-    .option('--repo-path <path>', 'Repository path (defaults to current working directory)')
+    .option('--repo-path <path>', 'Repository path or content subfolder (defaults to current working directory)')
+    .option('--content-dir <path>', 'Target folder path for published articles (relative to repo or absolute)')
     .option('--run-id <id>', 'Optional run identifier')
     .action(async options => {
       const bridgeArgs = [bridgePath(), 'detect-site-target'];
       if (options.repoPath) bridgeArgs.push('--repo-path', String(options.repoPath));
+      if (options.contentDir) bridgeArgs.push('--content-dir', String(options.contentDir));
       if (options.runId) bridgeArgs.push('--run-id', String(options.runId));
       await runInheritedBridge(bridgeArgs);
     });

@@ -326,6 +326,42 @@ def test_detect_site_contract_discovers_remix_app_content_blog_posts(tmp_path):
     assert contract.date_key == "publishedAt"
 
 
+def test_learn_site_contract_supports_explicit_content_dir_and_direct_subfolder(tmp_path):
+    from core.site_adapters import learn_site_contract_from_repo
+
+    site_repo = tmp_path / "astro-site"
+    guides_dir = site_repo / "src" / "content" / "guides"
+    guides_dir.mkdir(parents=True)
+    (site_repo / "astro.config.mjs").write_text("export default {};\n", encoding="utf-8")
+    (guides_dir / "getting-started.mdx").write_text(
+        '---\ntitle: "Getting Started"\nsummary: "Quick guide"\npublishedAt: "2026-11-10"\nheroImage: "/img/start.png"\n---\n\nBody\n',
+        encoding="utf-8",
+    )
+
+    # 1. Explicit relative content_dir override
+    by_override = learn_site_contract_from_repo(site_repo, content_dir=Path("src/content/guides"))
+    assert by_override.framework == "astro"
+    assert by_override.repo_root == str(site_repo.resolve())
+    assert by_override.content_dir == str(guides_dir.resolve())
+    assert by_override.existing_post_count == 1
+    assert by_override.description_key == "summary"
+    assert by_override.date_key == "publishedAt"
+    assert by_override.image_key == "heroImage"
+    assert by_override.image_is_string is True
+
+    # 2. Pasting the content subfolder path directly walks up to find the Astro repo root
+    by_subfolder = learn_site_contract_from_repo(guides_dir)
+    assert by_subfolder.framework == "astro"
+    assert by_subfolder.repo_root == str(site_repo.resolve())
+    assert by_subfolder.content_dir == str(guides_dir.resolve())
+    assert by_subfolder.existing_post_count == 1
+    assert by_subfolder.description_key == "summary"
+
+    # 3. Missing explicit content_dir fails clearly
+    with pytest.raises(FileNotFoundError, match="Content directory does not exist"):
+        learn_site_contract_from_repo(site_repo, content_dir=Path("src/content/does-not-exist"))
+
+
 @pytest.mark.asyncio
 async def test_content_generator_passes_its_brand_profile_to_smart_ai_router(monkeypatch):
     import core.generator as gen_mod

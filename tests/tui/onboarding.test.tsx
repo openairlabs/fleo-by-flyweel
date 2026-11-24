@@ -317,6 +317,18 @@ describe('First-Time TUI Setup Wizard', () => {
     expect(frame).toContain('Experimental: Direct repo publish');
     expect(frame).toContain('agent-handoff.md');
     expect(frame).toContain('README.md');
+
+    // Submitting repo path advances to optional custom content folder path input
+    stdin.write('\r');
+    await tick();
+    const contentDirFrame = lastFrame() ?? '';
+    expect(contentDirFrame).toContain('target folder path for published articles');
+    expect(contentDirFrame).toContain('leave blank to auto-detect');
+
+    // Pressing Esc returns cleanly to the repo path prompt
+    stdin.write('\x1b');
+    await tick();
+    expect(lastFrame() ?? '').toContain('Experimental: Direct repo publish');
     unmount();
   });
 });
