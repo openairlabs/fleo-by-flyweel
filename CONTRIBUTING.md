@@ -29,4 +29,4 @@ pnpm test
 
 - `core/` intentionally has **no `__init__.py`**; top-level runners (`generate.py`, `tui_bridge.py`) add repo root to `sys.path`.
 - The Ink TUI (`tui/`) communicates with Python exclusively via JSONL over stdio (`tui_bridge.py`). Keep `stdout` in bridge helpers strictly JSONL-only (log to `stderr`).
-- Keep `core/` 100% company-agnostic — never hardcode brand names, domains, or framework-proprietary MDX imports in core modules.
+- Keep `core/` 100% company-agnostic: never hardcode brand names, domains, or framework-proprietary MDX imports in core modules.

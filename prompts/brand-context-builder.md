@@ -16,7 +16,7 @@ Ask me **one brief group of questions at a time** (or read my website URL / code
 
 Once you have those answers, output ONLY a clean Markdown file in this exact structure so I can save it to `.agents/product-marketing.md`:
 
-# Product Marketing Context — [Company Name]
+# Product Marketing Context: [Company Name]
 
 *Last updated: YYYY-MM-DD*
 
@@ -28,7 +28,7 @@ Once you have those answers, output ONLY a clean Markdown file in this exact str
 - **Primary CTA:** [CTA Label] ([Signup/Demo URL])
 
 ## Products & Capabilities
-- **[Product 1]** ([URL]): [Factual description] — Pricing: [Exact pricing]
+- **[Product 1]** ([URL]): [Factual description] | Pricing: [Exact pricing]
 
 ## Target Audience (ICP)
 - **Primary Reader:** [Specific buyer/reader roles and company profile]

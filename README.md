@@ -1,6 +1,4 @@
-<div align="center">
-
-# Fleo by Flyweel (`@flyweel-labs/fleo`)
+# Fleo by Flyweel
 
 **The open-source AI SEO + AEO (Answer-Engine Optimization) content engine for any startup, founder, or marketing team.**
 
@@ -9,31 +7,25 @@
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-10b981.svg)](./LICENSE)
 [![Node.js >= 22](https://img.shields.io/badge/Node.js-%3E%3D22-339933.svg)](https://nodejs.org)
 [![Python >= 3.10](https://img.shields.io/badge/Python-Auto--Managed%20(%3E%3D3.10)-3776ab.svg)](./tui/lib/pythonBootstrap.ts)
-[![Release](https://img.shields.io/badge/Release-v0.1.0%20Early%20Public-f59e0b.svg)](./CHANGELOG.md)
 
 [60-Second Quickstart](#60-second-quickstart-no-coding-required) · [How to Publish](#how-to-publish-to-your-website-even-without-touching-code) · [Architecture](#system-architecture-overview) · [CLI Reference](#cli--headless-automation-reference) · [Security](#security--trust-boundaries)
 
-</div>
+<img src="./assets/fleo-demo.gif" alt="Fleo by Flyweel interactive terminal workflow demo" width="100%" />
 
 Fleo researches live search results, real Reddit and Quora discussions, and your own website to write fact-checked, citation-verified articles designed to rank on Google **and** get cited by ChatGPT, Perplexity, Claude, and Google AI Overviews, then exports ready-to-publish files for **any** website stack.
 
 > Sequel to [`openairlabs/flyweel-agentic-seo-aeo-engine`](https://github.com/openairlabs/flyweel-agentic-seo-aeo-engine) · Sister tool to [`openairlabs/seo-aeo-audit`](https://github.com/openairlabs/seo-aeo-audit) · Built and open-sourced by [Flyweel](https://www.flyweel.co)
 
-<p align="center">
-  <img src="./assets/fleo-demo.gif" alt="Fleo by Flyweel interactive terminal workflow demo" width="100%" />
-</p>
-
 > [!NOTE]
 > **Early public release (`v0.1.0`):** Fleo is live for early adopters and actively evolving. If you hit a bug, a framework quirk, or an edge case with your site stack, please [open an issue](https://github.com/openairlabs/fleo-by-flyweel/issues/new/choose) or send a PR.
 
----
-
-## Table of Contents
+<details>
+<summary><strong>Table of Contents</strong></summary>
 
 **For Founders, Marketers & Non-Technical Builders**
+- [60-Second Quickstart (No Coding Required)](#60-second-quickstart-no-coding-required)
 - [What Fleo Does (In Plain English)](#what-fleo-does-in-plain-english)
 - [Why Teams Use Fleo](#why-teams-use-fleo)
-- [60-Second Quickstart (No Coding Required)](#60-second-quickstart-no-coding-required)
 - [How to Publish to Your Website (Even Without Touching Code)](#how-to-publish-to-your-website-even-without-touching-code)
 - [Choosing the Right Article Style](#choosing-the-right-article-style)
 - [Interactive App Keyboard Shortcuts](#interactive-app-keyboard-shortcuts)
@@ -53,13 +45,42 @@ Fleo researches live search results, real Reddit and Quora discussions, and your
 - [Troubleshooting & FAQ](#troubleshooting--faq)
 - [Roadmap & Known Limitations](#roadmap--known-limitations)
 
+</details>
+
+---
+
+## 60-Second Quickstart (No Coding Required)
+
+### Before You Start (2 Things)
+1. **Install Node.js 22 or newer:** Download the standard installer for Mac, Windows, or Linux at [nodejs.org](https://nodejs.org).
+   *(You do **not** need to install Python or run terminal setup scripts; Fleo sets up its own private Python engine automatically on first launch.)*
+2. **Grab one API key from [OpenRouter](https://openrouter.ai/keys):** Create an account, add $5 of credit (enough for ~20 full articles), and copy your `sk-or-v1-...` key.
+
+### Launch Fleo
+Open **Terminal** (Mac/Linux) or **Windows Terminal / WSL** (Windows), navigate to any folder where you'd like your articles saved, and run:
+
+```bash
+npx @flyweel-labs/fleo
+```
+
+### What Happens Next: The 5-Step Guided Setup Wizard
+On your first run, Fleo opens a full-screen, arrow-key guided wizard:
+
+1. **Step 1 · Engine Check:** Automatically creates an isolated Python runtime inside `~/.fleo/venv` so nothing conflicts with the rest of your computer.
+2. **Step 2 · API Key & AI Models:** Paste your single `OPENROUTER_API_KEY`. Every pipeline step comes pre-configured with a **`[Default · Recommended]`** model, or you can open **Choose Models per Step** to switch models with the arrow keys (no model IDs to memorize).
+3. **Step 3 · Your Company & Brand:** Paste your website URL (e.g. `https://yourstartup.com`) and Fleo scans your pages to learn your products, pricing, audience pain points, competitors, and tone. *(No live site yet? Pick the 5-question interview instead.)*
+4. **Step 4 · How You Publish:** Pick **Agent Handoff Packet (`agent-handoff.md`)** *(Recommended; works safely with `Next.js`, `Astro`, `Webflow`, `Framer`, `Nuxt`, `SvelteKit`, `Remix`, or `Markdown`)*, **or** connect a local website repo for direct file publishing *(Experimental, best-effort for standard blogs; see [Option C](#option-c-direct-publish-to-a-local-website-repo-experimental))*.
+5. **Step 5 · Write Your First Article:** Type a topic (or press **`Ctrl+G`** to have Fleo brainstorm high-intent article ideas for your audience), press **`Enter`**, and watch each research and writing stage complete live.
+
+> **Tip:** Need to change your API key, switch AI models, or re-scan your website later? Press **`Ctrl+S`** anytime from the home Configure screen (or run `npx @flyweel-labs/fleo setup`).
+
 ---
 
 ## What Fleo Does (In Plain English)
 
 If you ask a standard AI chatbot to *"write a blog post for my startup,"* three things usually go wrong:
 1. **It sounds like generic AI filler** because it never read what real buyers are asking on Google, Reddit, or Quora today.
-2. **It makes things up** — inventing fake statistics, broken links, or product features and pricing tiers your company doesn't actually offer.
+2. **It makes things up,** inventing fake statistics, broken links, or product features and pricing tiers your company doesn't actually offer.
 3. **It hands you a wall of text** instead of a properly formatted webpage with search metadata, FAQs, citations, and structured data that search engines and AI assistants can read.
 
 **Think of Fleo as a 4-person editorial team inside one terminal app:**
@@ -73,7 +94,7 @@ If you ask a standard AI chatbot to *"write a blog post for my startup,"* three 
 
 ### What are SEO and AEO?
 - **SEO (Search Engine Optimization)** helps your page show up when buyers type a question into **Google** or **Bing**.
-- **AEO (Answer-Engine Optimization)** — also called **GEO** — structures your page with clear answer blocks, verified citations, comparison tables, and machine-readable `Schema.org` data so **ChatGPT, Perplexity, Claude, and Google AI Overviews** quote and link to your company when answering buyer questions.
+- **AEO (Answer-Engine Optimization)**, also called **GEO**, structures your page with clear answer blocks, verified citations, comparison tables, and machine-readable `Schema.org` data so **ChatGPT, Perplexity, Claude, and Google AI Overviews** quote and link to your company when answering buyer questions.
 
 Fleo optimizes every article for **both at the same time**.
 
@@ -81,39 +102,12 @@ Fleo optimizes every article for **both at the same time**.
 
 ## Why Teams Use Fleo
 
-- **Zero Hallucinated Links or Fake Features** — Every external citation is checked against a live research ledger before saving; invented URLs are automatically stripped. Product mentions are locked to your verified Brand Profile.
+- **Zero Hallucinated Links or Fake Features:** Every external citation is checked against a live research ledger before saving; invented URLs are automatically stripped. Product mentions are locked to your verified Brand Profile.
 - **Pennies Per Article, Zero SaaS Lock-In:** Fleo is 100% free and Apache-2.0 licensed. Bring your own [OpenRouter](https://openrouter.ai/keys) key and pay raw model cost: roughly **$0.23 per 2,500-word article** on the default Balanced preset (or **~$0.76** on Max flagship models), instead of $200–$500/month content subscriptions.
-- **Works With Any Website Stack** — Native exports for **Next.js**, **Astro**, **Webflow**, **Framer**, **Nuxt**, **SvelteKit**, **Remix**, and **Universal Markdown**.
-- **"Drop Into Any AI Builder" Mode (`agent-handoff.md`)** — Don't want to connect Fleo to your codebase? Every run generates a single `agent-handoff.md` file you can paste or drag into **Lovable, Bolt, v0, Cursor, Claude Code, Windsurf, or OpenCode**. It tells your builder exactly how to publish the post with full SEO/AEO intact.
-- **Optional Google Search Console Guardrails** — Connect Search Console to automatically spot keyword cannibalization (so two of your own posts don't fight each other) and score real traffic opportunity before you spend a cent generating.
-- **You Stay in the Driver's Seat** — Ask Fleo to pitch article angles (`Ctrl+G`), steer the angle in plain English, drop editorial notes while it runs (`c`), review the draft before final polish, and inspect a 0–100 Quality Scorecard before publishing.
-
----
-
-## 60-Second Quickstart (No Coding Required)
-
-### Before You Start (2 Things)
-1. **Install Node.js 22 or newer** — Download the standard installer for Mac, Windows, or Linux at [nodejs.org](https://nodejs.org).
-   *(You do **not** need to install Python or run terminal setup scripts — Fleo sets up its own private Python engine automatically on first launch.)*
-2. **Grab one API key from [OpenRouter](https://openrouter.ai/keys)** — Create an account, add $5 of credit (enough for ~20 full articles), and copy your `sk-or-v1-...` key.
-
-### Launch Fleo
-Open **Terminal** (Mac/Linux) or **Windows Terminal / WSL** (Windows), navigate to any folder where you'd like your articles saved, and run:
-
-```bash
-npx @flyweel-labs/fleo
-```
-
-### What Happens Next: The 5-Step Guided Setup Wizard
-On your first run, Fleo opens a full-screen, arrow-key guided wizard:
-
-1. **Step 1 · Engine Check** — Automatically creates an isolated Python runtime inside `~/.fleo/venv` so nothing conflicts with the rest of your computer.
-2. **Step 2 · API Key & AI Models** — Paste your single `OPENROUTER_API_KEY`. Every pipeline step comes pre-configured with a **`[Default · Recommended]`** model, or you can open **Choose Models per Step** to switch models with the arrow keys (no model IDs to memorize).
-3. **Step 3 · Your Company & Brand** — Paste your website URL (e.g. `https://yourstartup.com`) and Fleo scans your pages to learn your products, pricing, audience pain points, competitors, and tone. *(No live site yet? Pick the 5-question interview instead.)*
-4. **Step 4 · How You Publish** — Pick **Agent Handoff Packet (`agent-handoff.md`)** *(Recommended — works safely with `Next.js`, `Astro`, `Webflow`, `Framer`, `Nuxt`, `SvelteKit`, `Remix`, or `Markdown`)*, **or** connect a local website repo for direct file publishing *(Experimental — best-effort for standard blogs; see [Option C](#option-c-direct-publish-to-a-local-website-repo-experimental))*.
-5. **Step 5 · Write Your First Article** — Type a topic (or press **`Ctrl+G`** to have Fleo brainstorm high-intent article ideas for your audience), press **`Enter`**, and watch each research and writing stage complete live.
-
-> **Tip:** Need to change your API key, switch AI models, or re-scan your website later? Press **`Ctrl+S`** anytime from the home Configure screen (or run `npx @flyweel-labs/fleo setup`).
+- **Works With Any Website Stack:** Native exports for **Next.js**, **Astro**, **Webflow**, **Framer**, **Nuxt**, **SvelteKit**, **Remix**, and **Universal Markdown**.
+- **"Drop Into Any AI Builder" Mode (`agent-handoff.md`):** Don't want to connect Fleo to your codebase? Every run generates a single `agent-handoff.md` file you can paste or drag into **Lovable, Bolt, v0, Cursor, Claude Code, Windsurf, or OpenCode**. It tells your builder exactly how to publish the post with full SEO/AEO intact.
+- **Optional Google Search Console Guardrails:** Connect Search Console to automatically spot keyword cannibalization (so two of your own posts don't fight each other) and score real traffic opportunity before you spend a cent generating.
+- **You Stay in the Driver's Seat:** Ask Fleo to pitch article angles (`Ctrl+G`), steer the angle in plain English, drop editorial notes while it runs (`c`), review the draft before final polish, and inspect a 0–100 Quality Scorecard before publishing.
 
 ---
 
@@ -200,9 +194,9 @@ Fleo includes **8 specialized article blueprints** (plus **3 depth levels**: `qu
 | **`feature`** | Explaining a specific capability and the problem it solves | Problem-to-workflow breakdown connecting buyer pain points to concrete product capabilities |
 
 You can also choose **Brand Mention Mode** per article:
-- **`full` (Default)** — Naturally weaves your verified product and CTA where relevant.
-- **`limited`** — Keeps the article 95% educational with only 2–3 light mentions.
-- **`none`** — Purely educational thought leadership with zero product pitch.
+- **`full` (Default):** Naturally weaves your verified product and CTA where relevant.
+- **`limited`:** Keeps the article 95% educational with only 2–3 light mentions.
+- **`none`:** Purely educational thought leadership with zero product pitch.
 
 ---
 
@@ -223,7 +217,7 @@ The bottom bar of the app always shows the shortcuts available on your current s
 | `Ctrl+O` | Review / Preview | Expand the draft or final article to full-screen reading view (`PgUp`/`PgDn` to scroll) |
 | `i` | Preview | Toggle article metadata & Quality Scorecard summary |
 | `s` | Preview / Output | Save all adapted files + `agent-handoff.md` to `output/generations/` |
-| `P` *(Shift+p)* | Preview / Output | Publish directly into your connected local website repo *(Experimental — prefer `s` + `agent-handoff.md` for custom schemas)* |
+| `P` *(Shift+p)* | Preview / Output | Publish directly into your connected local website repo *(Experimental; prefer `s` + `agent-handoff.md` for custom schemas)* |
 | `n` | Output | Start a new article |
 | `l` | Any screen | Toggle live diagnostic & event log drawer |
 | `?` | Any screen | Open keyboard shortcut help overlay |
@@ -245,24 +239,21 @@ npx @flyweel-labs/fleo install-skill --agent claude-code --force
 
 ### The Open-Source AI Marketing Stack
 Fleo is built to interoperate cleanly with open marketing skills:
-- **Audit your live site first** with [`openairlabs/seo-aeo-audit`](https://github.com/openairlabs/seo-aeo-audit) — Runs a deterministic technical SEO + AEO audit across Next.js, Astro, Nuxt, SvelteKit, Remix, or WordPress to uncover the highest-ROI pages and content gaps to feed into Fleo.
-- **Shared `.agents/product-marketing.md` context** — Whenever Fleo saves your Brand Profile, it syncs `.agents/product-marketing.md` in the format used by [`coreyhaines31/marketingskills`](https://skills.sh/coreyhaines31/marketingskills) (`product-marketing`, `ai-seo`, `page-cro`, `programmatic-seo`). Configure your company once and 70+ marketing skills share the same source of truth.
+- **Audit your live site first** with [`openairlabs/seo-aeo-audit`](https://github.com/openairlabs/seo-aeo-audit): runs a deterministic technical SEO + AEO audit across Next.js, Astro, Nuxt, SvelteKit, Remix, or WordPress to uncover the highest-ROI pages and content gaps to feed into Fleo.
+- **Shared `.agents/product-marketing.md` context:** whenever Fleo saves your Brand Profile, it syncs `.agents/product-marketing.md` in the format used by [`coreyhaines31/marketingskills`](https://skills.sh/coreyhaines31/marketingskills) (`product-marketing`, `ai-seo`, `page-cro`, `programmatic-seo`). Configure your company once and 70+ marketing skills share the same source of truth.
 
 ---
----
 
-# Technical Reference & Architecture
+## Technical Reference & Architecture
 
 The sections below cover Fleo's internal architecture, protocol contracts, model routing, security boundaries, headless CLI flags, and contributor test suites.
 
----
-
-## System Architecture Overview
+### System Architecture Overview
 
 Fleo is split into two strictly isolated processes connected over a frozen **JSON Lines (`JSONL`) stdio protocol**:
 
-1. **Interactive Terminal Frontend (`bin/fleo.js` + `tui/`)** — TypeScript, React 19, and Ink 7 running on Node.js ≥ 22. Owns alternate-screen rendering, responsive terminal layout (`tui/lib/useTerminalSize.ts`), keymap dispatch (`tui/keymap.ts`), cold-start Python runtime provisioning (`tui/lib/pythonBootstrap.ts`), and pure state transitions (`tui/state.ts`). It never imports Python or makes LLM calls directly.
-2. **Async Content & Research Engine (`tui_bridge.py`, `generate.py`, `core/`)** — Plain async Python (`aiohttp` + `AsyncOpenAI`) running inside an isolated `~/.fleo/venv` (or repo `./venv`). Owns SSRF-safe brand crawling, live SERP/Reddit/Quora/GSC research, multi-model routing, 3-part generation, deterministic citation verification, fail-closed MDX/HTML security validation, quality scoring, and multi-framework adaptation.
+1. **Interactive Terminal Frontend (`bin/fleo.js` + `tui/`):** TypeScript, React 19, and Ink 7 running on Node.js ≥ 22. Owns alternate-screen rendering, responsive terminal layout (`tui/lib/useTerminalSize.ts`), keymap dispatch (`tui/keymap.ts`), cold-start Python runtime provisioning (`tui/lib/pythonBootstrap.ts`), and pure state transitions (`tui/state.ts`). It never imports Python or makes LLM calls directly.
+2. **Async Content & Research Engine (`tui_bridge.py`, `generate.py`, `core/`):** Plain async Python (`aiohttp` + `AsyncOpenAI`) running inside an isolated `~/.fleo/venv` (or repo `./venv`). Owns SSRF-safe brand crawling, live SERP/Reddit/Quora/GSC research, multi-model routing, 3-part generation, deterministic citation verification, fail-closed MDX/HTML security validation, quality scoring, and multi-framework adaptation.
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────────────┐
@@ -370,7 +361,7 @@ fleo-by-flyweel/
 ├── skills/                      # Bundled coding-agent skills (`fleo-setup-brand`, `fleo-publish-post`)
 ├── examples/profiles/           # Reference `BrandProfile` configs (`acme-cloud-saas`, `pulse-ai-startup`)
 ├── eval/                        # Offline deterministic SEO/AEO regression harness & golden baselines
-└── tests/                       # 680+ Python unit tests (`pytest`) + 185 TypeScript TUI tests (`vitest`)
+└── tests/                       # 700 Python unit tests (`pytest`) + 187 TypeScript TUI tests (`vitest`)
 ```
 
 > **Contributor invariant:** `core/` intentionally has **no `__init__.py`**. Top-level entrypoints (`tui_bridge.py`, `generate.py`, `eval/run_quality_eval.py`, and `tests/`) insert the package root onto `sys.path`. Do not add `core/__init__.py`.
@@ -381,8 +372,8 @@ fleo-by-flyweel/
 
 Fleo supports two credential modes out of the box (configurable in **Setup Wizard Step 2**, **`Ctrl+S`**, or `.env`):
 
-1. **1-Key Quickstart (Recommended)** — Set `OPENROUTER_API_KEY` alone. Every agent role (including Perplexity Sonar web search via `perplexity/sonar-reasoning-pro` on OpenRouter) routes automatically through OpenRouter.
-2. **Granular Per-Agent Keys & Model Overrides** — Assign separate API keys, models, or custom HTTPS gateways (`FLEO_<ROLE>_BASE_URL` exported in your shell environment and paired with `FLEO_<ROLE>_API_KEY`) to individual pipeline roles to split team billing, isolate rate limits, or call native vendor APIs directly (`PERPLEXITY_API_KEY` preserves native Sonar `search_domain_filter` and raw citation arrays; `GOOGLE_API_KEY` calls Google AI Studio directly).
+1. **1-Key Quickstart (Recommended):** Set `OPENROUTER_API_KEY` alone. Every agent role (including Perplexity Sonar web search via `perplexity/sonar-reasoning-pro` on OpenRouter) routes automatically through OpenRouter.
+2. **Granular Per-Agent Keys & Model Overrides:** Assign separate API keys, models, or custom HTTPS gateways (`FLEO_<ROLE>_BASE_URL` exported in your shell environment and paired with `FLEO_<ROLE>_API_KEY`) to individual pipeline roles to split team billing, isolate rate limits, or call native vendor APIs directly (`PERPLEXITY_API_KEY` preserves native Sonar `search_domain_filter` and raw citation arrays; `GOOGLE_API_KEY` calls Google AI Studio directly).
 
 | Pipeline Role | Dedicated API Key Env | Model Override Env | `balanced` Default (~$0.23/post) | `max` Default (~$0.76/post) |
 |---|---|---|---|---|
@@ -483,19 +474,19 @@ For cron jobs, batch scripts, or CI pipelines where you want pure headless execu
 ```
 
 Common `generate.py` flags:
-- `-k, --keyword <text>` — Target keyword or topic (required with `--no-int`).
-- `--style <style>` — `standard` | `guide` | `comparison` | `top-compare` | `research` | `news` | `category` | `feature`.
-- `--depth <depth>` — `quick` (~1,500w) | `standard` (~2,500w) | `comprehensive` (4,000w+).
-- `--solutions <5|8|10|15>` — Number of ranked vendors for `--style top-compare` (default `8`).
-- `--comp "Vendor A, Vendor B"` / `--nc` — Pin specific competitors or disable competitor mentions completely.
-- `--lfw` / `--nfw` — Limited brand mentions (`2–3`) or zero brand mentions (educational-only).
-- `--nr` / `--nrl` — Skip Reddit/Quora mining (`--nr`) or cap to top 3 Reddit + 1 Quora thread (`--nrl`).
-- `--note "editorial direction"` — Steer angle, examples, or tone.
-- `--judge` — Include LLM-as-judge GEO subjective dimensions (`clarity`, `fluency`, `authoritative_tone`) in `metadata.json`.
-- `--save-research` — Persist raw SERP and community research payloads alongside metadata.
-- `--no-gsc-check` / `--no-gsc-keywords` — Skip Google Search Console preflight checks.
-- `--local` / `--publish` / `--no-draft` — Save locally to `output/generations/` or publish into the connected blog path.
-- `--json` — Emit machine-readable JSON result summary on stdout.
+- `-k, --keyword <text>`: Target keyword or topic (required with `--no-int`).
+- `--style <style>`: `standard` | `guide` | `comparison` | `top-compare` | `research` | `news` | `category` | `feature`.
+- `--depth <depth>`: `quick` (~1,500w) | `standard` (~2,500w) | `comprehensive` (4,000w+).
+- `--solutions <5|8|10|15>`: Number of ranked vendors for `--style top-compare` (default `8`).
+- `--comp "Vendor A, Vendor B"` / `--nc`: Pin specific competitors or disable competitor mentions completely.
+- `--lfw` / `--nfw`: Limited brand mentions (`2–3`) or zero brand mentions (educational-only).
+- `--nr` / `--nrl`: Skip Reddit/Quora mining (`--nr`) or cap to top 3 Reddit + 1 Quora thread (`--nrl`).
+- `--note "editorial direction"`: Steer angle, examples, or tone.
+- `--judge`: Include LLM-as-judge GEO subjective dimensions (`clarity`, `fluency`, `authoritative_tone`) in `metadata.json`.
+- `--save-research`: Persist raw SERP and community research payloads alongside metadata.
+- `--no-gsc-check` / `--no-gsc-keywords`: Skip Google Search Console preflight checks.
+- `--local` / `--publish` / `--no-draft`: Save locally to `output/generations/` or publish into the connected blog path.
+- `--json`: Emit machine-readable JSON result summary on stdout.
 
 *(Working from a source clone? `reddit_scraper.py` is also available as a standalone community research CLI via `./venv/bin/python reddit_scraper.py --t "database schema migrations"`.)*
 
@@ -586,7 +577,7 @@ Create one folder per brand (for example `~/brands/acme` and `~/brands/globex`) 
 </details>
 
 <details>
-<summary><strong>OpenRouter returned a 402 credit error on Polish — what happened?</strong></summary>
+<summary><strong>OpenRouter returned a 402 credit error on Polish: what happened?</strong></summary>
 
 If you use an OpenAI-only BYOK setup on OpenRouter with minimal OpenRouter wallet credits, calling Anthropic Claude for Step 3 (Polish) may return HTTP `402`. Fleo automatically recovers mid-run by falling back to your Draft model. To avoid the retry altogether, press `Ctrl+S` → **Choose Models per Step** → **Step 3 · Humanizer & Polish** and select **OpenAI GPT-6 Sol `[OpenAI / BYOK]`**.
 </details>
