@@ -1,5 +1,5 @@
 {
-  "name": "fleo",
+  "name": "flyweel-fleo",
   "version": "0.1.0",
   "description": "Fleo by Flyweel: company-agnostic open-source AI SEO + AEO content engine with multi-model research, TUI setup wizard, multi-framework adapters, and universal agent handoff packets.",
   "license": "Apache-2.0",
@@ -14,8 +14,8 @@
   },
   "type": "module",
   "bin": {
-    "fleo": "./bin/fleo.js",
-    "flyweel-fleo": "./bin/fleo.js"
+    "flyweel-fleo": "bin/fleo.js",
+    "fleo": "bin/fleo.js"
   },
   "publishConfig": {
     "access": "public"

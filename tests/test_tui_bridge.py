@@ -826,7 +826,7 @@ def test_parser_output_defaults_to_none_so_output_dir_env_applies(monkeypatch, t
 
 
 def test_setup_status_runs_without_third_party_packages_and_flags_missing_runtime(tmp_path):
-    """Simulates first-run `npx fleo` on bare system Python before ~/.fleo/venv exists."""
+    """Simulates first-run `npx flyweel-fleo` on bare system Python before ~/.fleo/venv exists."""
     script = (
         "import importlib.abc, os, sys\n"
         "BLOCKED = {'openai', 'aiohttp', 'pydantic', 'yaml', 'bs4', 'defusedxml', 'rich', 'click', 'questionary'}\n"

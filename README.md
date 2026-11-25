@@ -5,7 +5,7 @@
 **The open-source AI SEO + AEO (Answer-Engine Optimization) content engine for any startup, founder, or marketing team.**
 
 [![CI](https://github.com/openairlabs/fleo-by-flyweel/actions/workflows/ci.yml/badge.svg)](https://github.com/openairlabs/fleo-by-flyweel/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/fleo?label=npm&color=0ea5e9)](https://www.npmjs.com/package/fleo)
+[![npm](https://img.shields.io/npm/v/flyweel-fleo?label=npm&color=0ea5e9)](https://www.npmjs.com/package/flyweel-fleo)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-10b981.svg)](./LICENSE)
 [![Node.js >= 22](https://img.shields.io/badge/Node.js-%3E%3D22-339933.svg)](https://nodejs.org)
 [![Python >= 3.10](https://img.shields.io/badge/Python-Auto--Managed%20(%3E%3D3.10)-3776ab.svg)](./tui/lib/pythonBootstrap.ts)
@@ -69,7 +69,7 @@ Fleo researches live search results, real Reddit and Quora discussions, and your
 Open **Terminal** (Mac/Linux) or **Windows Terminal / WSL** (Windows), navigate to any folder where you'd like your articles saved, and run:
 
 ```bash
-npx fleo
+npx flyweel-fleo
 ```
 
 ### What Happens Next: The 5-Step Guided Setup Wizard
@@ -86,7 +86,7 @@ On your first run, Fleo opens a full-screen, arrow-key guided wizard:
 
 5. **Step 5 · Write Your First Article:** Type a topic (or press **`Ctrl+G`** to have Fleo brainstorm high-intent article ideas for your audience), press **`Enter`**, and watch each research and writing stage complete live.
 
-> **Tip:** Need to change your API key, switch AI models, or re-scan your website later? Press **`Ctrl+S`** anytime from the home Configure screen (or run `npx fleo setup`).
+> **Tip:** Need to change your API key, switch AI models, or re-scan your website later? Press **`Ctrl+S`** anytime from the home Configure screen (or run `npx flyweel-fleo setup`).
 
 <br />
 
@@ -175,7 +175,7 @@ For standard blog setups:
 
 1. Point Fleo at your local website repository during Setup Step 4, or pass a specific target content folder directly:
    - **In the TUI Setup Step 4:** paste your repo root (and optionally enter a custom content folder path like `src/content/guides` on the next prompt), **or** paste the exact content subfolder path directly (Fleo walks up to detect your framework/git root while keeping your exact folder as the publish destination).
-   - **Via CLI:** run `npx fleo detect-site-target --repo-path ./your-site --content-dir src/content/guides` (or omit `--repo-path` and pass an absolute `--content-dir /abs/path/to/posts`).
+   - **Via CLI:** run `npx flyweel-fleo detect-site-target --repo-path ./your-site --content-dir src/content/guides` (or omit `--repo-path` and pass an absolute `--content-dir /abs/path/to/posts`).
    - **Via `.env` override:** set `FLEO_BLOG_CONTENT_PATH=/abs/path/to/posts` to override `.fleo/site-contract.json` for a workspace.
 
 2. When your article finishes, press **`P`** (capital `P`) on the Preview or Output screen to write the adapted file directly into your target folder. *(Fleo never runs `git commit` or `git push` behind your back; always review the diff and run your site's build/typecheck before committing.)*
@@ -266,10 +266,10 @@ Fleo ships with two ready-made agent skills (`fleo-setup-brand` and `fleo-publis
 
 ```bash
 # Install into Claude Code, OpenCode, Cursor, and Windsurf (skips existing files by default)
-npx fleo install-skill
+npx flyweel-fleo install-skill
 
 # Install for a single agent only, or pass --force to update existing skill files
-npx fleo install-skill --agent claude-code --force
+npx flyweel-fleo install-skill --agent claude-code --force
 ```
 
 ### The Open-Source AI Marketing Stack
@@ -375,7 +375,7 @@ Every article run executes a deterministic sequence orchestrated by `ContentGene
 
 ```text
 fleo-by-flyweel/
-├── bin/fleo.js                  # Node CLI entrypoint invoked by `npx fleo` / `fleo`
+├── bin/fleo.js                  # Node CLI entrypoint invoked by `npx flyweel-fleo` / `fleo`
 ├── tui/                         # TypeScript + React 19 + Ink 7 full-screen terminal application
 │   ├── cli.tsx                  # Commander subcommands (`setup`, `generate`, `install-skill`, etc.)
 │   ├── App.tsx                  # Top-level journey router, overlays, and lifecycle orchestration
@@ -487,18 +487,18 @@ External tools, CI jobs, or custom UIs can drive the Python engine directly via 
 
 ## CLI & Headless Automation Reference
 
-### Node / `npx` CLI (`fleo`)
+### Node / `npx` CLI (`flyweel-fleo`)
 
 ```bash
 # Launch interactive TUI (opens Setup Wizard automatically on unconfigured workspaces)
-npx fleo
-npx fleo --theme theme-flyweel   # Themes: theme-flyweel | theme-opencode | theme-high-contrast | theme-neutral-dark
+npx flyweel-fleo
+npx flyweel-fleo --theme theme-flyweel   # Themes: theme-flyweel | theme-opencode | theme-high-contrast | theme-neutral-dark
 
 # Open the Setup & Brand Onboarding Wizard directly
-npx fleo setup
+npx flyweel-fleo setup
 
 # Launch TUI with generation parameters pre-filled
-npx fleo generate \
+npx flyweel-fleo generate \
   -k "postgres branching for preview environments" \
   --style guide \
   --depth standard \
@@ -506,16 +506,16 @@ npx fleo generate \
   --brand-mode full
 
 # Non-interactive CI / environment health check (exits cleanly without opening alternate screen)
-npx fleo --no-tui
+npx flyweel-fleo --no-tui
 
 # Non-interactive workspace setup helpers (emit JSONL progress on stdout)
-npx fleo scan-brand-url --url https://yourstartup.com
-npx fleo detect-site-target --repo-path ./your-website-repo
-npx fleo detect-site-target --repo-path ./your-website-repo --content-dir src/content/guides
+npx flyweel-fleo scan-brand-url --url https://yourstartup.com
+npx flyweel-fleo detect-site-target --repo-path ./your-website-repo
+npx flyweel-fleo detect-site-target --repo-path ./your-website-repo --content-dir src/content/guides
 
 # Install companion skills into Claude Code, OpenCode, Cursor, and/or Windsurf
-npx fleo install-skill --agent all
-npx fleo install-skill --agent cursor --force
+npx flyweel-fleo install-skill --agent all
+npx flyweel-fleo install-skill --agent cursor --force
 ```
 
 ### Headless Python CLI (`generate.py`)
@@ -523,7 +523,7 @@ npx fleo install-skill --agent cursor --force
 For cron jobs, batch scripts, or CI pipelines where you want pure headless execution with structured JSON output:
 
 ```bash
-# Use ~/.fleo/venv/bin/python (auto-provisioned by `npx fleo`) or local ./venv/bin/python
+# Use ~/.fleo/venv/bin/python (auto-provisioned by `npx flyweel-fleo`) or local ./venv/bin/python
 ./venv/bin/python generate.py --no-int \
   -k "postgres branching for preview environments" \
   --style guide \
@@ -644,7 +644,7 @@ Usually no. On first launch, Fleo checks for `uv` or Python ≥ 3.10 and automat
 <details>
 <summary><strong>How do I manage multiple clients or brands on one machine?</strong></summary>
 
-Create one folder per brand (for example `~/brands/acme` and `~/brands/globex`) and run `npx fleo` inside each folder, or pass `FLEO_WORKDIR=~/brands/acme npx fleo`. Each workspace keeps its own `.fleo/brand/profile.json`, `.agents/product-marketing.md`, `.fleo/site-contract.json`, and `output/` history while sharing the cached `~/.fleo/venv` Python runtime.
+Create one folder per brand (for example `~/brands/acme` and `~/brands/globex`) and run `npx flyweel-fleo` inside each folder, or pass `FLEO_WORKDIR=~/brands/acme npx flyweel-fleo`. Each workspace keeps its own `.fleo/brand/profile.json`, `.agents/product-marketing.md`, `.fleo/site-contract.json`, and `output/` history while sharing the cached `~/.fleo/venv` Python runtime.
 </details>
 
 <details>

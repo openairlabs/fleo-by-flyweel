@@ -12,7 +12,7 @@ body:
     attributes:
       label: What happened?
       description: A clear and concise description of the bug.
-      placeholder: Example: Running `npx fleo detect-site-target` failed to detect my Astro content folder.
+      placeholder: Example: Running `npx flyweel-fleo detect-site-target` failed to detect my Astro content folder.
     validations:
       required: true
   - type: textarea
@@ -21,7 +21,7 @@ body:
       label: Steps to reproduce
       description: Exact commands, flags, or TUI steps that trigger the issue.
       placeholder: |
-        1. Run `npx fleo`
+        1. Run `npx flyweel-fleo`
         2. Go to Step 4 -> ...
         3. See error ...
     validations:
@@ -42,7 +42,7 @@ body:
         - OS & Terminal (e.g. macOS iTerm2, Ubuntu, Windows WSL2):
         - Node.js version (`node -v`):
         - Python version (`python3 --version`):
-        - Fleo version (`npx fleo --version`):
+        - Fleo version (`npx flyweel-fleo --version`):
         - Target stack / publish mode (Agent Handoff or Direct Repo + framework):
     validations:
       required: true
