@@ -12,14 +12,14 @@
 
 [60-Second Quickstart](#60-second-quickstart-no-coding-required) · [How to Publish](#how-to-publish-to-your-website-even-without-touching-code) · [Architecture](#system-architecture-overview) · [CLI Reference](#cli--headless-automation-reference) · [Security](#security--trust-boundaries)
 
-<br />
-
-<img src="./assets/fleo-demo.gif" alt="Fleo by Flyweel interactive terminal workflow demo" width="100%" />
-
 > [!NOTE]
 > **Early public release (`v0.1.0`):** Fleo is live for early adopters and actively evolving. If you hit a bug, a framework quirk, or an edge case with your site stack, please [open an issue](https://github.com/openairlabs/fleo-by-flyweel/issues/new/choose) or send a PR.
 
 Fleo researches live search results, real Reddit and Quora discussions, and your own website to write fact-checked, citation-verified articles designed to rank on Google **and** get cited by ChatGPT, Perplexity, Claude, and Google AI Overviews, then exports ready-to-publish files for **any** website stack.
+
+<br />
+
+<img src="./assets/fleo-demo.gif" alt="Fleo by Flyweel interactive terminal workflow demo" width="100%" />
 
 > Sequel to [`openairlabs/flyweel-agentic-seo-aeo-engine`](https://github.com/openairlabs/flyweel-agentic-seo-aeo-engine) · Built and open-sourced by [Flyweel](https://www.flyweel.co)
 
