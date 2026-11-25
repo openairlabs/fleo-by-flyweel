@@ -1,4 +1,6 @@
-# Fleo by Flyweel
+<img src="./assets/fleo-banner.png" alt="Fleo by Flyweel - Open-source AI SEO + AEO content engine" width="100%" />
+
+<br />
 
 **The open-source AI SEO + AEO (Answer-Engine Optimization) content engine for any startup, founder, or marketing team.**
 
@@ -10,17 +12,21 @@
 
 [60-Second Quickstart](#60-second-quickstart-no-coding-required) · [How to Publish](#how-to-publish-to-your-website-even-without-touching-code) · [Architecture](#system-architecture-overview) · [CLI Reference](#cli--headless-automation-reference) · [Security](#security--trust-boundaries)
 
+<br />
+
 <img src="./assets/fleo-demo.gif" alt="Fleo by Flyweel interactive terminal workflow demo" width="100%" />
-
-Fleo researches live search results, real Reddit and Quora discussions, and your own website to write fact-checked, citation-verified articles designed to rank on Google **and** get cited by ChatGPT, Perplexity, Claude, and Google AI Overviews, then exports ready-to-publish files for **any** website stack.
-
-> Sequel to [`openairlabs/flyweel-agentic-seo-aeo-engine`](https://github.com/openairlabs/flyweel-agentic-seo-aeo-engine) · Sister tool to [`openairlabs/seo-aeo-audit`](https://github.com/openairlabs/seo-aeo-audit) · Built and open-sourced by [Flyweel](https://www.flyweel.co)
 
 > [!NOTE]
 > **Early public release (`v0.1.0`):** Fleo is live for early adopters and actively evolving. If you hit a bug, a framework quirk, or an edge case with your site stack, please [open an issue](https://github.com/openairlabs/fleo-by-flyweel/issues/new/choose) or send a PR.
 
+Fleo researches live search results, real Reddit and Quora discussions, and your own website to write fact-checked, citation-verified articles designed to rank on Google **and** get cited by ChatGPT, Perplexity, Claude, and Google AI Overviews, then exports ready-to-publish files for **any** website stack.
+
+> Sequel to [`openairlabs/flyweel-agentic-seo-aeo-engine`](https://github.com/openairlabs/flyweel-agentic-seo-aeo-engine) · Built and open-sourced by [Flyweel](https://www.flyweel.co)
+
 <details>
 <summary><strong>Table of Contents</strong></summary>
+
+<br />
 
 **For Founders, Marketers & Non-Technical Builders**
 - [60-Second Quickstart (No Coding Required)](#60-second-quickstart-no-coding-required)
@@ -47,16 +53,19 @@ Fleo researches live search results, real Reddit and Quora discussions, and your
 
 </details>
 
----
+<br />
 
 ## 60-Second Quickstart (No Coding Required)
 
 ### Before You Start (2 Things)
+
 1. **Install Node.js 22 or newer:** Download the standard installer for Mac, Windows, or Linux at [nodejs.org](https://nodejs.org).
    *(You do **not** need to install Python or run terminal setup scripts; Fleo sets up its own private Python engine automatically on first launch.)*
+
 2. **Grab one API key from [OpenRouter](https://openrouter.ai/keys):** Create an account, add $5 of credit (enough for ~20 full articles), and copy your `sk-or-v1-...` key.
 
 ### Launch Fleo
+
 Open **Terminal** (Mac/Linux) or **Windows Terminal / WSL** (Windows), navigate to any folder where you'd like your articles saved, and run:
 
 ```bash
@@ -64,23 +73,31 @@ npx @flyweel-labs/fleo
 ```
 
 ### What Happens Next: The 5-Step Guided Setup Wizard
+
 On your first run, Fleo opens a full-screen, arrow-key guided wizard:
 
 1. **Step 1 · Engine Check:** Automatically creates an isolated Python runtime inside `~/.fleo/venv` so nothing conflicts with the rest of your computer.
+
 2. **Step 2 · API Key & AI Models:** Paste your single `OPENROUTER_API_KEY`. Every pipeline step comes pre-configured with a **`[Default · Recommended]`** model, or you can open **Choose Models per Step** to switch models with the arrow keys (no model IDs to memorize).
+
 3. **Step 3 · Your Company & Brand:** Paste your website URL (e.g. `https://yourstartup.com`) and Fleo scans your pages to learn your products, pricing, audience pain points, competitors, and tone. *(No live site yet? Pick the 5-question interview instead.)*
+
 4. **Step 4 · How You Publish:** Pick **Agent Handoff Packet (`agent-handoff.md`)** *(Recommended; works safely with `Next.js`, `Astro`, `Webflow`, `Framer`, `Nuxt`, `SvelteKit`, `Remix`, or `Markdown`)*, **or** connect a local website repo for direct file publishing *(Experimental, best-effort for standard blogs; see [Option C](#option-c-direct-publish-to-a-local-website-repo-experimental))*.
+
 5. **Step 5 · Write Your First Article:** Type a topic (or press **`Ctrl+G`** to have Fleo brainstorm high-intent article ideas for your audience), press **`Enter`**, and watch each research and writing stage complete live.
 
 > **Tip:** Need to change your API key, switch AI models, or re-scan your website later? Press **`Ctrl+S`** anytime from the home Configure screen (or run `npx @flyweel-labs/fleo setup`).
 
----
+<br />
 
 ## What Fleo Does (In Plain English)
 
 If you ask a standard AI chatbot to *"write a blog post for my startup,"* three things usually go wrong:
+
 1. **It sounds like generic AI filler** because it never read what real buyers are asking on Google, Reddit, or Quora today.
+
 2. **It makes things up,** inventing fake statistics, broken links, or product features and pricing tiers your company doesn't actually offer.
+
 3. **It hands you a wall of text** instead of a properly formatted webpage with search metadata, FAQs, citations, and structured data that search engines and AI assistants can read.
 
 **Think of Fleo as a 4-person editorial team inside one terminal app:**
@@ -93,23 +110,30 @@ If you ask a standard AI chatbot to *"write a blog post for my startup,"* three 
 | **4. Fact-Checker & Web Publisher** | Checks every cited link against the live sources gathered during research (deleting any invented URL), builds Google/AI `Schema.org` metadata and FAQs, and packages the post for your exact website builder. |
 
 ### What are SEO and AEO?
+
 - **SEO (Search Engine Optimization)** helps your page show up when buyers type a question into **Google** or **Bing**.
+
 - **AEO (Answer-Engine Optimization)**, also called **GEO**, structures your page with clear answer blocks, verified citations, comparison tables, and machine-readable `Schema.org` data so **ChatGPT, Perplexity, Claude, and Google AI Overviews** quote and link to your company when answering buyer questions.
 
 Fleo optimizes every article for **both at the same time**.
 
----
+<br />
 
 ## Why Teams Use Fleo
 
 - **Zero Hallucinated Links or Fake Features:** Every external citation is checked against a live research ledger before saving; invented URLs are automatically stripped. Product mentions are locked to your verified Brand Profile.
+
 - **Pennies Per Article, Zero SaaS Lock-In:** Fleo is 100% free and Apache-2.0 licensed. Bring your own [OpenRouter](https://openrouter.ai/keys) key and pay raw model cost: roughly **$0.23 per 2,500-word article** on the default Balanced preset (or **~$0.76** on Max flagship models), instead of $200–$500/month content subscriptions.
+
 - **Works With Any Website Stack:** Native exports for **Next.js**, **Astro**, **Webflow**, **Framer**, **Nuxt**, **SvelteKit**, **Remix**, and **Universal Markdown**.
+
 - **"Drop Into Any AI Builder" Mode (`agent-handoff.md`):** Don't want to connect Fleo to your codebase? Every run generates a single `agent-handoff.md` file you can paste or drag into **Lovable, Bolt, v0, Cursor, Claude Code, Windsurf, or OpenCode**. It tells your builder exactly how to publish the post with full SEO/AEO intact.
+
 - **Optional Google Search Console Guardrails:** Connect Search Console to automatically spot keyword cannibalization (so two of your own posts don't fight each other) and score real traffic opportunity before you spend a cent generating.
+
 - **You Stay in the Driver's Seat:** Ask Fleo to pitch article angles (`Ctrl+G`), steer the angle in plain English, drop editorial notes while it runs (`c`), review the draft before final polish, and inspect a 0–100 Quality Scorecard before publishing.
 
----
+<br />
 
 ## How to Publish to Your Website (Even Without Touching Code)
 
@@ -129,11 +153,13 @@ output/generations/2026-11-15_your-article-slug/
 Pick whichever publishing workflow fits how you manage your site:
 
 ### Option A: Using an AI Builder or Coding Assistant (Lovable, Cursor, Claude Code, Bolt, Windsurf)
+
 1. Open your website project in **Lovable, Cursor, Claude Code, Windsurf, or OpenCode**.
 2. Drag **`agent-handoff.md`** into the chat and say: *"Publish this article to our blog following the instructions in the file."*
 3. `agent-handoff.md` has built-in instructions at the top that guide your AI assistant to match your existing blog layout, wire real internal links, attach the `Schema.org` JSON-LD without duplicates, check `robots.txt` for AI crawlers (`GPTBot`, `ClaudeBot`, `PerplexityBot`), and keep every word and citation intact.
 
 ### Option B: Using Webflow or Framer CMS (No Code)
+
 1. Select **Webflow** or **Framer** in Step 4 of Setup.
 2. Import **`<slug>.cms.csv`** directly into your Webflow or Framer Blog CMS Collection (or paste `<slug>.webflow.html` / `<slug>.framer.html` into your Rich Text field).
 3. Paste **`<slug>.head-schema.html`** into the post's custom `<head>` code slot so Google and AI search engines see your FAQ and article schema.
@@ -146,14 +172,20 @@ Pick whichever publishing workflow fits how you manage your site:
 > **Not confident configuring or customizing this?** Use **[Option A (`agent-handoff.md`)](#option-a-using-an-ai-builder-or-coding-assistant-lovable-cursor-claude-code-bolt-windsurf)** instead. It requires zero code changes and lets your coding agent inspect your site's exact conventions before writing and building.
 
 For standard blog setups:
+
 1. Point Fleo at your local website repository during Setup Step 4, or pass a specific target content folder directly:
    - **In the TUI Setup Step 4:** paste your repo root (and optionally enter a custom content folder path like `src/content/guides` on the next prompt), **or** paste the exact content subfolder path directly (Fleo walks up to detect your framework/git root while keeping your exact folder as the publish destination).
    - **Via CLI:** run `npx @flyweel-labs/fleo detect-site-target --repo-path ./your-site --content-dir src/content/guides` (or omit `--repo-path` and pass an absolute `--content-dir /abs/path/to/posts`).
    - **Via `.env` override:** set `FLEO_BLOG_CONTENT_PATH=/abs/path/to/posts` to override `.fleo/site-contract.json` for a workspace.
+
 2. When your article finishes, press **`P`** (capital `P`) on the Preview or Output screen to write the adapted file directly into your target folder. *(Fleo never runs `git commit` or `git push` behind your back; always review the diff and run your site's build/typecheck before committing.)*
 
 #### Aligning a Cloned Copy of Fleo to Your Local Website Repo (Advanced)
-If your site uses custom content collections, strict schemas, custom MDX components, or strict formatting rules and you want direct repo publishing (`P`) to match your repo out of the box, **clone Fleo locally** and paste this prompt into your AI coding agent (Claude Code, Cursor, OpenCode, Codex, or Windsurf):
+
+If your site uses custom content collections, strict schemas, custom MDX components, or strict formatting rules and you want direct repo publishing (`P`) to match your repo out of the box, **clone Fleo locally** and paste the alignment prompt below into your AI coding agent (Claude Code, Cursor, OpenCode, Codex, or Windsurf):
+
+<details>
+<summary><strong>Expand local-clone agent alignment prompt</strong></summary>
 
 ```text
 Align my local clone of Fleo (<PATH_TO_CLONED_FLEO>) so its experimental direct-repo publishing mode matches my local website repository (<PATH_TO_MY_SITE_REPO>).
@@ -176,7 +208,9 @@ Align my local clone of Fleo (<PATH_TO_CLONED_FLEO>) so its experimental direct-
    - Test a sample publish to a throwaway slug in my website repo (or temp copy) and run my website repo's typecheck/build (e.g., `astro check`, `next build`) to confirm zero schema or build errors, then remove the throwaway test file.
 ```
 
----
+</details>
+
+<br />
 
 ## Choosing the Right Article Style
 
@@ -194,11 +228,12 @@ Fleo includes **8 specialized article blueprints** (plus **3 depth levels**: `qu
 | **`feature`** | Explaining a specific capability and the problem it solves | Problem-to-workflow breakdown connecting buyer pain points to concrete product capabilities |
 
 You can also choose **Brand Mention Mode** per article:
+
 - **`full` (Default):** Naturally weaves your verified product and CTA where relevant.
 - **`limited`:** Keeps the article 95% educational with only 2–3 light mentions.
 - **`none`:** Purely educational thought leadership with zero product pitch.
 
----
+<br />
 
 ## Interactive App Keyboard Shortcuts
 
@@ -223,7 +258,7 @@ The bottom bar of the app always shows the shortcuts available on your current s
 | `?` | Any screen | Open keyboard shortcut help overlay |
 | `Ctrl+C` twice | Any screen | Quit Fleo cleanly |
 
----
+<br />
 
 ## Companion Skills for Cursor, Claude Code, Lovable & OpenCode
 
@@ -238,11 +273,18 @@ npx @flyweel-labs/fleo install-skill --agent claude-code --force
 ```
 
 ### The Open-Source AI Marketing Stack
+
 Fleo is built to interoperate cleanly with open marketing skills:
+
 - **Audit your live site first** with [`openairlabs/seo-aeo-audit`](https://github.com/openairlabs/seo-aeo-audit): runs a deterministic technical SEO + AEO audit across Next.js, Astro, Nuxt, SvelteKit, Remix, or WordPress to uncover the highest-ROI pages and content gaps to feed into Fleo.
+
 - **Shared `.agents/product-marketing.md` context:** whenever Fleo saves your Brand Profile, it syncs `.agents/product-marketing.md` in the format used by [`coreyhaines31/marketingskills`](https://skills.sh/coreyhaines31/marketingskills) (`product-marketing`, `ai-seo`, `page-cro`, `programmatic-seo`). Configure your company once and 70+ marketing skills share the same source of truth.
 
+<br />
+
 ---
+
+<br />
 
 ## Technical Reference & Architecture
 
@@ -253,6 +295,7 @@ The sections below cover Fleo's internal architecture, protocol contracts, model
 Fleo is split into two strictly isolated processes connected over a frozen **JSON Lines (`JSONL`) stdio protocol**:
 
 1. **Interactive Terminal Frontend (`bin/fleo.js` + `tui/`):** TypeScript, React 19, and Ink 7 running on Node.js ≥ 22. Owns alternate-screen rendering, responsive terminal layout (`tui/lib/useTerminalSize.ts`), keymap dispatch (`tui/keymap.ts`), cold-start Python runtime provisioning (`tui/lib/pythonBootstrap.ts`), and pure state transitions (`tui/state.ts`). It never imports Python or makes LLM calls directly.
+
 2. **Async Content & Research Engine (`tui_bridge.py`, `generate.py`, `core/`):** Plain async Python (`aiohttp` + `AsyncOpenAI`) running inside an isolated `~/.fleo/venv` (or repo `./venv`). Owns SSRF-safe brand crawling, live SERP/Reddit/Quora/GSC research, multi-model routing, 3-part generation, deterministic citation verification, fail-closed MDX/HTML security validation, quality scoring, and multi-framework adaptation.
 
 ```text
@@ -284,7 +327,7 @@ Fleo is split into two strictly isolated processes connected over a frozen **JSO
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
 
----
+<br />
 
 ## The 7-Stage Generation Pipeline
 
@@ -293,33 +336,42 @@ Every article run executes a deterministic sequence orchestrated by `ContentGene
 1. **Stage 0 · GSC Preflight & Traffic Opportunity Gate (`core/gsc_analyzer.py`, `core/keyword_ideas.py`)**
    - Queries Google Search Console (when configured) to check whether an existing URL already ranks for the target query (cannibalization check) and computes a log-scaled **0–100% Opportunity Score** (`normalize_traffic_potential_score`) across semantically clustered queries.
    - If the score falls below the threshold (default `25`) and an interactive TUI session is attached, opens a human-in-the-loop `gsc_gate_opened` confirmation before spending tokens. Headless runs log a warning and proceed without blocking.
+
 2. **Stage 1 · Parallel Multi-Source Research (`core/research.py`, `core/site_markdown.py`, `core/repo_extractor.py`)**
    - **SERP Intelligence**: Queries Perplexity Sonar (`sonar-reasoning-pro` by default) to extract top-ranking structural patterns, People Also Ask (PAA) questions, cited statistics, and content gaps.
    - **Community Mining**: Searches Reddit and Quora discussions, scores thread relevance via the fast classifier model, and extracts authentic practitioner pain points and objections.
    - **Authoritative Enrichment**: Optionally queries Interfaze (`INTERFAZE_API_KEY`) for academic and primary-source benchmarks on `--style research` runs.
    - **Brand Grounding**: Loads verified product facts, pricing, and internal routes from `.fleo/brand/profile.json`, live site markdown (`llms.txt` → `sitemap.xml` → clean HTML-to-Markdown), and/or connected repo blog posts (excluding drafts).
+
 3. **Stage 2 · Angle Framing & Prompt Fencing (`core/context_intelligence.py`, `core/insight_formatter.py`)**
    - Synthesizes a sharp editorial angle, maps verified source URLs into an indexed citation directory, and wraps all external web, SERP, community, and crawled company text inside sanitized `<untrusted_external_data>` XML blocks with system-level anti-injection rules.
+
 4. **Stage 3 · Segmented 3-Part Long-Form Drafting (`core/generator.py`, `core/ai_router.py`)**
    - Generates long-form articles in **3 sequential completions** rather than one monolithic prompt so models never hit output-token ceilings or compress middle sections:
      - **Part 1**: YAML frontmatter, answer-first opening TL;DR, core definitions, and foundational mechanics.
      - **Part 2**: Deep-dive workflows, comparison matrices, benchmark tables, and community-grounded examples.
      - **Part 3**: Edge cases, troubleshooting, actionable takeaways, and inline source attributions.
+
 5. **Stage 4 · Formatting, Schema `@graph` & Citation Ledger Verification (`core/formatter.py`, `core/faq_builder.py`, `core/schema_generator.py`, `core/citation_verifier.py`)**
    - Normalizes heading hierarchy, builds visible body FAQs matching PAA intent, and compiles a linked `Schema.org` `@graph` (`Organization`, `Person`, `WebPage`, `BlogPosting`, `BreadcrumbList`, and `FAQPage`).
    - Converts inline `[Source](url)` attributions into numbered `<span id="cite-N">` footnotes and runs `verify_citations_against_ledger`: any external URL not present in the run's verified research ledger (or `BrandProfile` allowlist) is stripped back to plain text so hallucinated URLs never ship.
+
 6. **Stage 5 · Pre-Polish HITL Review Gate & Segmented Refinement (`core/ai_router.py`, `core/content_scrubber.py`)**
    - In interactive mode, opens `review_gate_opened` so the user can inspect the assembled draft, queue inline revision comments, approve polish, or skip polish.
    - Runs proportional `max_tokens` section-by-section editorial polishing (humanizing sentence cadence, removing AI clichés/banned words, applying user notes) followed by surgical H2, title, meta description, and TL;DR optimization passes.
    - Long-output editing/polishing passes explicitly disable hidden reasoning tokens on Nebius/OpenRouter models (`OR_PROVIDER_NEBIUS_FAST`) so thinking budgets never starve output generation.
+
 7. **Stage 6 · Fail-Closed Security Validation, Quality Scorecard & Stack Adaptation (`core/mdx_security.py`, `core/content_validator.py`, `core/quality_judge.py`, `core/site_adapters.py`, `core/artifacts.py`)**
    - Runs `assert_safe_mdx` on both canonical and framework-adapted outputs before touching disk.
    - Computes the deterministic **0–100 Quality Scorecard** (AEO directness, citation density, heading structure, readability, keyword stuffing checks) plus optional `--judge` LLM-as-judge Princeton GEO dimensions (`clarity`, `fluency`, `authoritative_tone`).
    - Adapts components, frontmatter keys, and file formats to the target website framework and writes `agent-handoff.md`, `schema.json`, and `metadata.json`.
 
----
+<br />
 
 ## Repository Map
+
+<details>
+<summary><strong>Expand full repository directory tree</strong></summary>
 
 ```text
 fleo-by-flyweel/
@@ -364,15 +416,18 @@ fleo-by-flyweel/
 └── tests/                       # 700 Python unit tests (`pytest`) + 187 TypeScript TUI tests (`vitest`)
 ```
 
+</details>
+
 > **Contributor invariant:** `core/` intentionally has **no `__init__.py`**. Top-level entrypoints (`tui_bridge.py`, `generate.py`, `eval/run_quality_eval.py`, and `tests/`) insert the package root onto `sys.path`. Do not add `core/__init__.py`.
 
----
+<br />
 
 ## Model Routing, BYOK & Per-Agent API Keys
 
 Fleo supports two credential modes out of the box (configurable in **Setup Wizard Step 2**, **`Ctrl+S`**, or `.env`):
 
 1. **1-Key Quickstart (Recommended):** Set `OPENROUTER_API_KEY` alone. Every agent role (including Perplexity Sonar web search via `perplexity/sonar-reasoning-pro` on OpenRouter) routes automatically through OpenRouter.
+
 2. **Granular Per-Agent Keys & Model Overrides:** Assign separate API keys, models, or custom HTTPS gateways (`FLEO_<ROLE>_BASE_URL` exported in your shell environment and paired with `FLEO_<ROLE>_API_KEY`) to individual pipeline roles to split team billing, isolate rate limits, or call native vendor APIs directly (`PERPLEXITY_API_KEY` preserves native Sonar `search_domain_filter` and raw citation arrays; `GOOGLE_API_KEY` calls Google AI Studio directly).
 
 | Pipeline Role | Dedicated API Key Env | Model Override Env | `balanced` Default (~$0.23/post) | `max` Default (~$0.76/post) |
@@ -387,18 +442,21 @@ Fleo supports two credential modes out of the box (configurable in **Setup Wizar
 | **8 · Typed Audit Decisions** | `FLEO_DECISIONS_API_KEY` | `FLEO_JEV_ENABLED=1\|0` | `typesafe/jev-1.13` | `typesafe/jev-1.13` |
 
 ### Built-In BYOK & OpenRouter `402` Resilience
+
 Many teams use OpenRouter with **BYOK (Bring Your Own Key)** for a single provider (e.g., an OpenAI key linked to OpenRouter with low platform credits). If a secondary model (such as Anthropic Polish) returns HTTP `402` (insufficient OpenRouter credits or missing provider key):
+
 - `SmartAIRouter` parses the affordable token ceiling from the `402` response and shrinks `max_tokens` proportionally when possible; or
 - Automatically falls back to your working `DRAFT` model (`model_generation`) and pins that fallback for the remainder of the run so multi-section polishing completes cleanly without repeated errors.
 
----
+<br />
 
 ## Multi-Framework Site Learner & Output Adapters
 
 `core/site_adapters.py` decouples canonical article generation from framework-specific syntax:
 
-- **Automatic Repo Inspection (`learn_site_contract_from_repo`, Experimental)**: Best-effort inspection of framework config files (`next.config.*`, `astro.config.*`, `nuxt.config.*`, `svelte.config.*`, `remix.config.*`), standard blog content directories (`content/blog`, `src/content/blog`, `app/content/blog`, etc.) or an explicit `--content-dir` / content subfolder path, and up to 5 existing Markdown/MDX posts to learn common frontmatter keys (`title`, `description` vs. `summary` vs. `excerpt`, `publishDate` vs. `date` vs. `publishedAt`, `tags`, and image shape) into `.fleo/site-contract.json`. Does not parse custom Zod/Contentlayer schemas, bespoke MDX components, or repo formatters. Use [`agent-handoff.md`](#option-a-using-an-ai-builder-or-coding-assistant-lovable-cursor-claude-code-bolt-windsurf) by default, or follow the [local clone alignment prompt](#aligning-a-cloned-copy-of-fleo-to-your-local-website-repo-advanced) for custom repos.
-- **Target Outputs by Framework**:
+- **Automatic Repo Inspection (`learn_site_contract_from_repo`, Experimental):** Best-effort inspection of framework config files (`next.config.*`, `astro.config.*`, `nuxt.config.*`, `svelte.config.*`, `remix.config.*`), standard blog content directories (`content/blog`, `src/content/blog`, `app/content/blog`, etc.) or an explicit `--content-dir` / content subfolder path, and up to 5 existing Markdown/MDX posts to learn common frontmatter keys (`title`, `description` vs. `summary` vs. `excerpt`, `publishDate` vs. `date` vs. `publishedAt`, `tags`, and image shape) into `.fleo/site-contract.json`. Does not parse custom Zod/Contentlayer schemas, bespoke MDX components, or repo formatters. Use [`agent-handoff.md`](#option-a-using-an-ai-builder-or-coding-assistant-lovable-cursor-claude-code-bolt-windsurf) by default, or follow the [local clone alignment prompt](#aligning-a-cloned-copy-of-fleo-to-your-local-website-repo-advanced) for custom repos.
+
+- **Target Outputs by Framework:**
 
 | Target ID | Primary File | How Components, Schema & Prose Are Adapted |
 |---|---|---|
@@ -411,20 +469,21 @@ Many teams use OpenRouter with **BYOK (Bring Your Own Key)** for a single provid
 | `framer` | `final.md` + extras | Generates `<slug>.framer.html` (Rich Text), `<slug>.cms.csv` (formula-sanitized CSV), and `<slug>.head-schema.html` |
 | `markdown` | `final.md` | Pure portable CommonMark + GFM tables, visible FAQs, `schema.json`, and `agent-handoff.md` |
 
----
+<br />
 
 ## Frozen JSONL Bridge Protocol (`tui_bridge.py`)
 
 External tools, CI jobs, or custom UIs can drive the Python engine directly via `tui_bridge.py`. `stdout` is strictly reserved for newline-delimited JSON (`JSONL`); all logging is routed to `stderr`.
 
-- **Events emitted on `stdout`**: `setup_status`, `run_plan`, `phase_started`, `task_progress`, `tool_call`, `artifact_ready`, `review_gate_opened`, `review_gate_closed`, `gsc_gate_opened`, `gsc_gate_closed`, `generation_complete`, `saved`, `published`, `warning`, `error`.
-- **Commands accepted on `stdin` during `generate`**:
+- **Events emitted on `stdout`:** `setup_status`, `run_plan`, `phase_started`, `task_progress`, `tool_call`, `artifact_ready`, `review_gate_opened`, `review_gate_closed`, `gsc_gate_opened`, `gsc_gate_closed`, `generation_complete`, `saved`, `published`, `warning`, `error`.
+
+- **Commands accepted on `stdin` during `generate`:**
   - `{"type": "queue_comment", "runId": "...", "comment": "Emphasize SOC2 trade-offs"}`
   - `{"type": "review_decision", "runId": "...", "decision": "approve", "comment": "..."}` (`approve` | `skip_polish` | `abort`)
   - `{"type": "gsc_decision", "runId": "...", "decision": "proceed"}` (`proceed` | `abort`)
   - `{"type": "cancel", "runId": "..."}`
 
----
+<br />
 
 ## CLI & Headless Automation Reference
 
@@ -473,7 +532,11 @@ For cron jobs, batch scripts, or CI pipelines where you want pure headless execu
   --json
 ```
 
-Common `generate.py` flags:
+<details>
+<summary><strong>Common <code>generate.py</code> flags</strong></summary>
+
+<br />
+
 - `-k, --keyword <text>`: Target keyword or topic (required with `--no-int`).
 - `--style <style>`: `standard` | `guide` | `comparison` | `top-compare` | `research` | `news` | `category` | `feature`.
 - `--depth <depth>`: `quick` (~1,500w) | `standard` (~2,500w) | `comprehensive` (4,000w+).
@@ -488,27 +551,34 @@ Common `generate.py` flags:
 - `--local` / `--publish` / `--no-draft`: Save locally to `output/generations/` or publish into the connected blog path.
 - `--json`: Emit machine-readable JSON result summary on stdout.
 
+</details>
+
 *(Working from a source clone? `reddit_scraper.py` is also available as a standalone community research CLI via `./venv/bin/python reddit_scraper.py --t "database schema migrations"`.)*
 
----
+<br />
 
 ## Security & Trust Boundaries
 
 Fleo treats **all** LLM outputs, crawled web pages, community threads, and repository inputs as untrusted data. See [`SECURITY.md`](./SECURITY.md) for vulnerability reporting and full boundary details:
 
-1. **Unmasked Fail-Closed Markup Validation (`core/mdx_security.py`)**: Scans the full article body without regex code-fence masking so Markdown/MDX parser differentials cannot smuggle live `{expr}` JS/Svelte expressions. Rejects `<script>`, `<iframe>`, `<object>`, `<base>`, `on*=` event handlers, `dangerouslySetInnerHTML`, Svelte `{@html}`, unapproved ESM `import`/`export` statements (including non-ASCII and spaceless specifiers), nested tag starts, control characters, and non-`http(s)`/`mailto` link destinations before any file is written.
-2. **DNS-Pinned SSRF Protection (`core/url_safety.py`, `core/site_markdown.py`)**: Resolves DNS and blocks loopback (`127.0.0.0/8`, `::1`), RFC1918 private networks, link-local/cloud metadata (`169.254.169.254`), and CGNAT ranges on **every** redirect hop with socket-level IP verification, same-origin sitemap-index caps, and wall-clock HTTP deadlines.
-3. **Indirect Prompt-Injection Fencing**: Crawled pages (excluding external `llms.txt` links), SERP summaries, Reddit/Quora snippets, and compliance rules are sanitized against zero-width/full-width tag breakouts and wrapped in `<untrusted_external_data>` XML fences. `agent-handoff.md` and `.agents/product-marketing.md` sanitize crawled fields and declare explicit untrusted-data boundaries for downstream coding agents.
-4. **Secret & `.env` Isolation (`core/paths.py`, `core/agent_credentials.py`, `core/tui_bridge.py`)**:
+1. **Unmasked Fail-Closed Markup Validation (`core/mdx_security.py`):** Scans the full article body without regex code-fence masking so Markdown/MDX parser differentials cannot smuggle live `{expr}` JS/Svelte expressions. Rejects `<script>`, `<iframe>`, `<object>`, `<base>`, `on*=` event handlers, `dangerouslySetInnerHTML`, Svelte `{@html}`, unapproved ESM `import`/`export` statements (including non-ASCII and spaceless specifiers), nested tag starts, control characters, and non-`http(s)`/`mailto` link destinations before any file is written.
+
+2. **DNS-Pinned SSRF Protection (`core/url_safety.py`, `core/site_markdown.py`):** Resolves DNS and blocks loopback (`127.0.0.0/8`, `::1`), RFC1918 private networks, link-local/cloud metadata (`169.254.169.254`), and CGNAT ranges on **every** redirect hop with socket-level IP verification, same-origin sitemap-index caps, and wall-clock HTTP deadlines.
+
+3. **Indirect Prompt-Injection Fencing:** Crawled pages (excluding external `llms.txt` links), SERP summaries, Reddit/Quora snippets, and compliance rules are sanitized against zero-width/full-width tag breakouts and wrapped in `<untrusted_external_data>` XML fences. `agent-handoff.md` and `.agents/product-marketing.md` sanitize crawled fields and declare explicit untrusted-data boundaries for downstream coding agents.
+
+4. **Secret & `.env` Isolation (`core/paths.py`, `core/agent_credentials.py`, `core/tui_bridge.py`):**
    - API keys are written atomically to `.env` with `0600` permissions (refusing symlinks and warning via `git check-ignore` if `.env` is unignored).
    - `load_repo_env` enforces a strict Fleo variable allowlist and blocks proxy/TLS/runtime hijack variables (`HTTPS_PROXY`, `SSL_CERT_FILE`, `GOOGLE_APPLICATION_CREDENTIALS`, `FLEO_PYTHON`, `FLEO_WORKDIR`, and all `*_BASE_URL` overrides).
    - Provider-native keys (`OPENROUTER_API_KEY`, `PERPLEXITY_API_KEY`, `GOOGLE_API_KEY`, `GEMINI_API_KEY`) are pinned to their official HTTPS endpoints, and unknown/ambiguous key prefixes (such as bare `sk-` keys) are refused unless paired with an explicit shell-exported HTTPS `FLEO_<ROLE>_BASE_URL`.
-5. **Terminal Escape & CSV Formula Neutralization (`tui/bridge.ts`, `core/site_adapters.py`)**: Strips OSC (`52` clipboard, `8` hyperlink, window title), CSI/SGR, and C0/C1 control sequences from bridge events and stderr, and neutralizes spreadsheet formula prefixes (`=`, `+`, `-`, `@`) in Webflow/Framer `.cms.csv` exports.
-6. **Isolated Runtime Bootstrap (`tui/lib/pythonBootstrap.ts`)**: Spawns Python and `uv` bootstrap commands from Fleo's own `installationRoot` with `PYTHONSAFEPATH=1` and `UV_NO_CONFIG=1` so untrusted modules or `uv.toml` files in the current working directory are never executed.
+
+5. **Terminal Escape & CSV Formula Neutralization (`tui/bridge.ts`, `core/site_adapters.py`):** Strips OSC (`52` clipboard, `8` hyperlink, window title), CSI/SGR, and C0/C1 control sequences from bridge events and stderr, and neutralizes spreadsheet formula prefixes (`=`, `+`, `-`, `@`) in Webflow/Framer `.cms.csv` exports.
+
+6. **Isolated Runtime Bootstrap (`tui/lib/pythonBootstrap.ts`):** Spawns Python and `uv` bootstrap commands from Fleo's own `installationRoot` with `PYTHONSAFEPATH=1` and `UV_NO_CONFIG=1` so untrusted modules or `uv.toml` files in the current working directory are never executed.
 
 > **Workspace safety note:** As with any developer CLI, inspect `.env` and `.fleo/` before running Fleo inside an untrusted third-party repository.
 
----
+<br />
 
 ## Workspace Files & Environment Reference
 
@@ -525,7 +595,7 @@ Fleo scopes all user configuration and generated artifacts to your active worksp
 
 See [`.env.example`](./.env.example) for a complete, commented template of all supported environment variables.
 
----
+<br />
 
 ## Local Development, Testing & Quality Gates
 
@@ -549,12 +619,13 @@ pnpm test                                         # 187 Vitest + ink-testing-lib
 ```
 
 Additional developer workflows:
-- **Run TUI in watch/dev mode (no build step)**: `pnpm dev`
-- **Run live paid-API integration suite** *(requires `.env` keys)*: `./venv/bin/pytest -m integration`
-- **Run quality eval with live LLM-as-judge**: `./venv/bin/python eval/run_quality_eval.py --judge`
-- **Inspect packed npm tarball**: `npm pack --dry-run`
 
----
+- **Run TUI in watch/dev mode (no build step):** `pnpm dev`
+- **Run live paid-API integration suite** *(requires `.env` keys)*: `./venv/bin/pytest -m integration`
+- **Run quality eval with live LLM-as-judge:** `./venv/bin/python eval/run_quality_eval.py --judge`
+- **Inspect packed npm tarball:** `npm pack --dry-run`
+
+<br />
 
 ## Troubleshooting & FAQ
 
@@ -582,19 +653,23 @@ Create one folder per brand (for example `~/brands/acme` and `~/brands/globex`) 
 If you use an OpenAI-only BYOK setup on OpenRouter with minimal OpenRouter wallet credits, calling Anthropic Claude for Step 3 (Polish) may return HTTP `402`. Fleo automatically recovers mid-run by falling back to your Draft model. To avoid the retry altogether, press `Ctrl+S` → **Choose Models per Step** → **Step 3 · Humanizer & Polish** and select **OpenAI GPT-6 Sol `[OpenAI / BYOK]`**.
 </details>
 
----
+<br />
 
 ## Roadmap & Known Limitations
 
 Fleo `v0.1.0` ships the full end-to-end research, writing, citation verification, and multi-framework export pipeline. Current focus areas and known limitations:
 
-- **Direct Local Repo Publishing (`[Experimental]`)**: Works best on standard Markdown/MDX blog folders (`Next.js`, `Astro`, `Nuxt`, `SvelteKit`, `Remix`) and supports custom folder paths via Step 4 or `--content-dir`. Sites with custom MDX components, strict content schemas, or headless CMS pipelines should use the recommended **`agent-handoff.md`** workflow or align a local clone with your coding agent.
-- **CMS Connectors**: Webflow and Framer currently export Rich Text HTML, sanitized CMS CSVs, and head schema snippets (`agent-handoff.md` included). Direct API publishing for Webflow, Framer, Ghost, and Sanity is on the roadmap.
-- **Image & Diagram Generation**: Hero and section image prompts are emitted in `metadata.json` and `agent-handoff.md`; automated asset generation and upload adapters are planned.
-- **Windows Terminal Support**: Native macOS, Linux, and WSL2 terminals are the primary tested targets; native Windows PowerShell and cmd rendering edge cases are still being hardened.
-- **Model Presets**: Model defaults in `config/` evolve as newer models land on OpenRouter, Perplexity, and Google AI Studio. Bug reports, adapter improvements, and PRs are welcome in [Issues](https://github.com/openairlabs/fleo-by-flyweel/issues/new/choose).
+- **Direct Local Repo Publishing (`[Experimental]`):** Works best on standard Markdown/MDX blog folders (`Next.js`, `Astro`, `Nuxt`, `SvelteKit`, `Remix`) and supports custom folder paths via Step 4 or `--content-dir`. Sites with custom MDX components, strict content schemas, or headless CMS pipelines should use the recommended **`agent-handoff.md`** workflow or align a local clone with your coding agent.
 
----
+- **CMS Connectors:** Webflow and Framer currently export Rich Text HTML, sanitized CMS CSVs, and head schema snippets (`agent-handoff.md` included). Direct API publishing for Webflow, Framer, Ghost, and Sanity is on the roadmap.
+
+- **Image & Diagram Generation:** Hero and section image prompts are emitted in `metadata.json` and `agent-handoff.md`; automated asset generation and upload adapters are planned.
+
+- **Windows Terminal Support:** Native macOS, Linux, and WSL2 terminals are the primary tested targets; native Windows PowerShell and cmd rendering edge cases are still being hardened.
+
+- **Model Presets:** Model defaults in `config/` evolve as newer models land on OpenRouter, Perplexity, and Google AI Studio. Bug reports, adapter improvements, and PRs are welcome in [Issues](https://github.com/openairlabs/fleo-by-flyweel/issues/new/choose).
+
+<br />
 
 ## Contributing, Security & License
 
