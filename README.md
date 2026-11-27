@@ -19,7 +19,7 @@ Fleo researches live search results, real Reddit and Quora discussions, and your
 
 >**👋 A note from Reuben, CEO & Founder of Flyweel:**
 >
-I'm a performance marketer by trade, not a software engineer. I built this for our own organic growth and it took us from almost zero to 9,000 search impressions in just 60-90 days and continues to power our growth so I wanted to share it in the hope it helps just one founder, marketer or developer. It is not Flyweel's product and I have nothing to sell you. As I am non-technical by trade, our engineering team has done a security review of this codebase, it might not be perfect. If you spot any issues, please feel free to let us know, open a PR to contribute, or start a Discussion!.
+I'm a performance marketer by trade, not a software engineer. I built this for our own organic growth and it took us from almost zero to 9,000 search impressions a day in just 60-90 days and continues to power our growth so I wanted to share it in the hope it helps just one founder, marketer or developer. It is not Flyweel's product and I have nothing to sell you. As I am non-technical by trade, our engineering team has done a security review of this codebase, it might not be perfect. If you spot any issues, please feel free to let us know, open a PR to contribute, or start a Discussion!.
 
 <br />
 
