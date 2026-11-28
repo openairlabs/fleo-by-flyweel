@@ -23,7 +23,7 @@ I'm a performance marketer by trade, not a software engineer. I built this for o
 
 <br />
 
-<img src="./assets/fleo-demo.gif" alt="Fleo by Flyweel interactive terminal workflow demo" width="100%" />
+https://github.com/user-attachments/assets/a39cdd6b-e312-4952-bc0c-3e300af71429
 
 > Sequel to [`openairlabs/flyweel-agentic-seo-aeo-engine`](https://github.com/openairlabs/flyweel-agentic-seo-aeo-engine) · Built and open-sourced by [Flyweel](https://www.flyweel.co)
 
