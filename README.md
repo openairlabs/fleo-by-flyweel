@@ -4,6 +4,8 @@
 
 **The open-source AI SEO + AEO (Answer-Engine Optimization) content engine for any startup, founder, or marketing team.**
 
+<a href="https://www.producthunt.com/products/fleo-by-flyweel?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-fleo-by-flyweel" target="_blank" rel="noopener noreferrer"><img alt="Fleo by Flyweel - Free, open-source multi-model SEO/AEO agentic content engine | Product Hunt" width="200" height="46" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1333992&amp;theme=dark&amp;t=1795835882330"></a> 
+
 [![CI](https://github.com/openairlabs/fleo-by-flyweel/actions/workflows/ci.yml/badge.svg)](https://github.com/openairlabs/fleo-by-flyweel/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/flyweel-fleo?label=npm&color=0ea5e9)](https://www.npmjs.com/package/flyweel-fleo)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-10b981.svg)](./LICENSE)
